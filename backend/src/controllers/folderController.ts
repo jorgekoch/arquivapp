@@ -3,6 +3,7 @@ import {
   createFolderService,
   deleteFolderService,
   getFoldersService,
+  getFolderListService,
 } from "../services/folderService";
 
 export async function createFolder(req: Request, res: Response, next: NextFunction) {
@@ -23,6 +24,18 @@ export async function getFolders(req: Request, res: Response, next: NextFunction
     const userId = req.userId!;
 
     const folders = await getFoldersService(userId);
+
+    res.send(folders);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getFolderList(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.userId!;
+
+    const folders = await getFolderListService(userId);
 
     res.send(folders);
   } catch (error) {

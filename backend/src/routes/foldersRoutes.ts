@@ -3,6 +3,7 @@ import {
   createFolder,
   deleteFolder,
   getFolders,
+  getFolderList,
 } from "../controllers/folderController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import {
@@ -15,6 +16,7 @@ import { idParamSchema } from "../schemas/paramsSchema";
 const router = Router();
 
 router.post("/", authMiddleware, validateBody(createFolderSchema), createFolder);
+router.get("/list", authMiddleware, getFolderList);
 router.get("/", authMiddleware, getFolders);
 router.delete("/:id", authMiddleware, validateParams(idParamSchema), deleteFolder);
 

@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { api } from "../services/api";
 
-export function LoginPage() {
-  const { login } = useAuth();
+export function RegisterPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -21,10 +19,12 @@ export function LoginPage() {
 
     try {
       setLoading(true);
-      await login(form);
-      navigate("/dashboard");
+
+      await api.post("/users/register", form);
+
+      navigate("/");
     } catch (err: any) {
-      setError(err?.response?.data?.error || "Erro ao fazer login");
+      setError(err?.response?.data?.error || "Erro ao criar usuário");
     } finally {
       setLoading(false);
     }
@@ -33,8 +33,8 @@ export function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card card">
-        <h1>Entrar</h1>
-        <p className="muted">Acesse sua biblioteca de arquivos.</p>
+        <h1>Criar conta</h1>
+        <p className="muted">Crie um usuário para acessar o sistema.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
@@ -60,13 +60,13 @@ export function LoginPage() {
           {error && <p className="error-text">{error}</p>}
 
           <button className="primary-button full-width" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? "Criando..." : "Criar conta"}
           </button>
-
-          <p className="muted" style={{ marginTop: 12 }}>
-            Não possui conta? <Link to="/register" className="create-user-link">Criar usuário</Link>
-          </p>
         </form>
+
+        <p className="muted" style={{ marginTop: 12 }}>
+        Já possui conta? <Link to="/" className="create-user-link">Entrar</Link>
+        </p>
       </div>
     </div>
   );

@@ -226,6 +226,15 @@ a {
   place-items: center;
 }
 
+.create-user-link {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.create-user-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
