@@ -943,14 +943,30 @@ a {
 }
 
 @media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
   .inline-form,
   .upload-form {
     flex-direction: column;
   }
 
   .topbar {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .topbar-texts {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .user-menu-wrapper {
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .app-shell {
@@ -1140,24 +1156,6 @@ a {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .folder-list,
-  .file-list {
-    gap: 8px;
-  }
-
-  .folder-item,
-  .file-item {
-    border-radius: 12px;
-  }
-
-  .folder-actions {
-    gap: 4px;
-  }
-
-  .icon-button {
-    padding: 5px;
   }
 }
 
