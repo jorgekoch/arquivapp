@@ -1,26 +1,32 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { findUserByEmail } from "../repositories/userRepository";
+import { AppError } from "../errors/AppError";
 
 export async function loginService(email: string, password: string) {
+  const user = await findUserByEmail(email);
 
- const user = await findUserByEmail(email);
+  if (!user) {
+    throw new AppError("Invalid credentials", 401);
+  }
 
- if (!user) {
-  throw new Error("Invalid credentials");
- }
+  const passwordValid = await bcrypt.compare(password, user.password);
 
- const passwordValid = await bcrypt.compare(password, user.password);
+  if (!passwordValid) {
+    throw new AppError("Invalid credentials", 401);
+  }
 
- if (!passwordValid) {
-  throw new Error("Invalid credentials");
- }
+  const jwtSecret = process.env.JWT_SECRET;
 
- const token = jwt.sign(
-  { userId: user.id },
-  process.env.JWT_SECRET as string,
-  { expiresIn: "1d" }
- );
+  if (!jwtSecret) {
+    throw new AppError("JWT_SECRET is not configured", 500);
+  }
 
- return token;
+  const token = jwt.sign(
+    { userId: user.id },
+    jwtSecret,
+    { expiresIn: "1d" }
+  );
+
+  return token;
 }

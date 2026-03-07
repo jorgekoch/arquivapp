@@ -1,9 +1,42 @@
+import fs from "fs";
 import * as folderRepository from "../repositories/folderRepository";
+import { AppError } from "../errors/AppError";
 
-export function createFolderService(name: string) {
-  return folderRepository.createFolder(name);
+export function createFolderService(name: string, userId: number) {
+  return folderRepository.createFolder(name, userId);
 }
 
-export function getFoldersService() {
-  return folderRepository.getFolders();
+export function getFoldersService(userId: number) {
+  return folderRepository.getFoldersByUserId(userId);
+}
+
+export function getFolderListService(userId: number) {
+  return folderRepository.getFolderListByUserId(userId);
+}
+
+export async function getOwnedFolderOrFail(folderId: number, userId: number) {
+  const folder = await folderRepository.getFolderById(folderId);
+
+  if (!folder) {
+    throw new AppError("Folder not found", 404);
+  }
+
+  if (folder.userId !== userId) {
+    throw new AppError("Forbidden", 403);
+  }
+
+  return folder;
+}
+
+export async function deleteFolderService(folderId: number, userId: number) {
+  const folder = await getOwnedFolderOrFail(folderId, userId);
+
+  for (const file of folder.files) {
+    if (fs.existsSync(file.url)) {
+      fs.unlinkSync(file.url);
+    }
+  }
+
+  await folderRepository.deleteFilesByFolderId(folderId);
+  await folderRepository.deleteFolderById(folderId);
 }

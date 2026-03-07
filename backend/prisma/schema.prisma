@@ -12,13 +12,17 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+
+  folders Folder[]
 }
 
 model Folder {
   id        Int      @id @default(autoincrement())
   name      String
+  userId    Int
   createdAt DateTime @default(now())
 
+  user  User  @relation(fields: [userId], references: [id])
   files File[]
 }
 
@@ -26,6 +30,7 @@ model File {
   id        Int      @id @default(autoincrement())
   name      String
   url       String
+  publicId  String
   folderId  Int
   createdAt DateTime @default(now())
 

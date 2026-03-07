@@ -1,18 +1,44 @@
-import { Request, Response } from "express";
-import { createFolderService, getFoldersService } from "../services/folderService";
+import { NextFunction, Request, Response } from "express";
+import {
+  createFolderService,
+  deleteFolderService,
+  getFoldersService,
+} from "../services/folderService";
 
-export async function createFolder(req: Request, res: Response) {
+export async function createFolder(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { name } = req.body;
+    const userId = req.userId!;
 
-  const { name } = req.body;
+    const folder = await createFolderService(name, userId);
 
-  const folder = await createFolderService(name);
-
-  res.status(201).send(folder);
+    res.status(201).send(folder);
+  } catch (error) {
+    next(error);
+  }
 }
 
-export async function getFolders(req: Request, res: Response) {
+export async function getFolders(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.userId!;
 
-  const folders = await getFoldersService();
+    const folders = await getFoldersService(userId);
 
-  res.send(folders);
+    res.send(folders);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteFolder(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id } = req.params;
+    const userId = req.userId!;
+
+    await deleteFolderService(Number(id), userId);
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
 }

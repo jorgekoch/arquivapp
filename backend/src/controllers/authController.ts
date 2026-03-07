@@ -1,19 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { loginService } from "../services/authService";
 
-export async function login(req: Request, res: Response) {
+export async function login(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email, password } = req.body;
 
- const { email, password } = req.body;
+    const token = await loginService(email, password);
 
- try {
-
-  const token = await loginService(email, password);
-
-  res.send({ token });
-
- } catch (error) {
-
-  res.status(401).send({ error: "Invalid credentials" });
-
- }
+    res.send({ token });
+  } catch (error) {
+    next(error);
+  }
 }

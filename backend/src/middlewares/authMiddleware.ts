@@ -1,25 +1,37 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AppError } from "../errors/AppError";
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: number;
+    }
+  }
+}
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+  try {
+    const authHeader = req.headers.authorization;
 
- const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      throw new AppError("Token not provided", 401);
+    }
 
- if (!authHeader) return res.sendStatus(401);
+    const token = authHeader.replace("Bearer ", "");
 
- const token = authHeader.split(" ")[1];
+    const jwtSecret = process.env.JWT_SECRET;
 
- try {
+    if (!jwtSecret) {
+      throw new AppError("JWT_SECRET is not configured", 500);
+    }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    const data = jwt.verify(token, jwtSecret) as { userId: number };
 
-  res.locals.user = decoded;
+    req.userId = data.userId;
 
-  next();
-
- } catch {
-
-  res.sendStatus(401);
-
- }
+    next();
+  } catch (error) {
+    next(error);
+  }
 }
