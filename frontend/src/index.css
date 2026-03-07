@@ -152,6 +152,11 @@ a {
   min-height: 420px;
 }
 
+.sidebar {
+  position: sticky;
+  top: 20px;
+}
+
 /* SECTIONS */
 
 .section-header {
@@ -1130,7 +1135,10 @@ a {
   }
 
   .dashboard-grid {
-    gap: 12px;
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
   }
 
   .folder-list,
