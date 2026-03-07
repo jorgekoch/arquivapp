@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { FeedbackMessage } from "../components/FeedbackMessage";
 
 export function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated, isAuthLoading } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -14,6 +14,10 @@ export function LoginPage() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!isAuthLoading && isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,8 +37,9 @@ export function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card card">
+        <p className="eyebrow">Bleize Archives</p>
         <h1>Entrar</h1>
-        <p className="muted">Acesse sua biblioteca de arquivos.</p>
+        <p className="muted">Acesse seu acervo privado.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
@@ -57,16 +62,19 @@ export function LoginPage() {
             }
           />
 
-          {error && <p className="error-text">{error}</p>}
+          {error && <FeedbackMessage type="error" message={error} />}
 
           <button className="primary-button full-width" disabled={loading}>
             {loading ? "Entrando..." : "Entrar"}
           </button>
-
-          <p className="muted" style={{ marginTop: 12 }}>
-            Não possui conta? <Link to="/register" className="create-user-link">Criar usuário</Link>
-          </p>
         </form>
+
+        <p className="muted auth-link-text">
+          Não possui conta?{" "}
+          <Link to="/register" className="auth-link-highlight">
+            Criar usuário
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -4,20 +4,25 @@ import { UploadFileForm } from "./UploadFileForm";
 type Props = {
   selectedFolder: Folder | null;
   files: FileItem[];
+  loading: boolean;
   onUpload: (file: File) => Promise<void>;
-  onDeleteFile: (fileId: number) => Promise<void>;
+  onDeleteFile: (file: FileItem) => void;
 };
 
 export function FilePanel({
   selectedFolder,
   files,
+  loading,
   onUpload,
   onDeleteFile,
 }: Props) {
   if (!selectedFolder) {
     return (
       <section className="content card center-content">
-        <p className="muted">Selecione uma pasta para visualizar os arquivos.</p>
+        <div>
+          <h2>Nenhuma pasta selecionada</h2>
+          <p className="muted">Escolha uma pasta para visualizar os arquivos.</p>
+        </div>
       </section>
     );
   }
@@ -27,17 +32,19 @@ export function FilePanel({
       <div className="section-header">
         <div>
           <h2>{selectedFolder.name}</h2>
-          <p className="muted">Gerencie os arquivos desta pasta.</p>
+          <p className="muted">Adicione, visualize e gerencie os arquivos desta pasta.</p>
         </div>
       </div>
 
       <UploadFileForm disabled={!selectedFolder} onUpload={onUpload} />
 
-      <div className="file-list">
-        {files.length === 0 ? (
-          <p className="muted">Nenhum arquivo nesta pasta.</p>
-        ) : (
-          files.map((file) => (
+      {loading ? (
+        <p className="muted">Carregando arquivos...</p>
+      ) : files.length === 0 ? (
+        <p className="muted">Nenhum arquivo nesta pasta.</p>
+      ) : (
+        <div className="file-list">
+          {files.map((file) => (
             <div key={file.id} className="file-item">
               <div className="file-info">
                 <strong>{file.name}</strong>
@@ -53,14 +60,14 @@ export function FilePanel({
 
               <button
                 className="danger-button small"
-                onClick={() => onDeleteFile(file.id)}
+                onClick={() => onDeleteFile(file)}
               >
                 Excluir
               </button>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

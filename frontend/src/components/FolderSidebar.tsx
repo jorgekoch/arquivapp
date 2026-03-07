@@ -1,29 +1,39 @@
 import type { Folder } from "../types";
+import { Pencil, Trash2 } from "lucide-react";
 
 type Props = {
   folders: Folder[];
   selectedFolderId: number | null;
+  loading: boolean;
   onSelectFolder: (folderId: number) => void;
-  onDeleteFolder: (folderId: number) => Promise<void>;
+  onEditFolder: (folder: Folder) => void;
+  onDeleteFolder: (folder: Folder) => void;
 };
 
 export function FolderSidebar({
   folders,
   selectedFolderId,
+  loading,
   onSelectFolder,
+  onEditFolder,
   onDeleteFolder,
 }: Props) {
   return (
     <aside className="sidebar card">
       <div className="section-header">
-        <h2>Pastas</h2>
+        <div>
+          <h2>Pastas</h2>
+          <p className="muted">Organize seus materiais.</p>
+        </div>
       </div>
 
-      <div className="folder-list">
-        {folders.length === 0 ? (
-          <p className="muted">Nenhuma pasta criada.</p>
-        ) : (
-          folders.map((folder) => (
+      {loading ? (
+        <p className="muted">Carregando pastas...</p>
+      ) : folders.length === 0 ? (
+        <p className="muted">Nenhuma pasta criada.</p>
+      ) : (
+        <div className="folder-list">
+          {folders.map((folder) => (
             <div
               key={folder.id}
               className={`folder-item ${
@@ -37,16 +47,25 @@ export function FolderSidebar({
                 {folder.name}
               </button>
 
-              <button
-                className="danger-button small"
-                onClick={() => onDeleteFolder(folder.id)}
-              >
-                Excluir
-              </button>
+              <div className="folder-actions">
+                <button
+                  className="icon-button"
+                  onClick={() => onEditFolder(folder)}
+                >
+                  <Pencil size={16} />
+                </button>
+
+                <button
+                  className="icon-button danger"
+                  onClick={() => onDeleteFolder(folder)}
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </aside>
   );
 }

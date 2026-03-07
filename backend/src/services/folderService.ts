@@ -1,6 +1,6 @@
-import fs from "fs";
 import * as folderRepository from "../repositories/folderRepository";
 import { AppError } from "../errors/AppError";
+import { deleteFromCloudinary } from "./cloudinaryService";
 
 export function createFolderService(name: string, userId: number) {
   return folderRepository.createFolder(name, userId);
@@ -28,13 +28,21 @@ export async function getOwnedFolderOrFail(folderId: number, userId: number) {
   return folder;
 }
 
+export async function updateFolderService(
+  folderId: number,
+  userId: number,
+  name: string
+) {
+  await getOwnedFolderOrFail(folderId, userId);
+
+  return folderRepository.updateFolderName(folderId, name);
+}
+
 export async function deleteFolderService(folderId: number, userId: number) {
   const folder = await getOwnedFolderOrFail(folderId, userId);
 
   for (const file of folder.files) {
-    if (fs.existsSync(file.url)) {
-      fs.unlinkSync(file.url);
-    }
+    await deleteFromCloudinary(file.publicId);
   }
 
   await folderRepository.deleteFilesByFolderId(folderId);

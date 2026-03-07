@@ -16,3 +16,11 @@ export type FileItem = {
   folderId: number;
   createdAt: string;
 };
+
+export type Profile = {
+  id: number;
+  email: string;
+  name: string;
+  avatarUrl: string | null;
+  createdAt: string;
+};

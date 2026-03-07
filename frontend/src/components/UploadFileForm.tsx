@@ -18,7 +18,8 @@ export function UploadFileForm({ disabled, onUpload }: Props) {
       setLoading(true);
       await onUpload(selectedFile);
       setSelectedFile(null);
-      const input = document.getElementById("file-input") as HTMLInputElement;
+
+      const input = document.getElementById("file-input") as HTMLInputElement | null;
       if (input) input.value = "";
     } finally {
       setLoading(false);

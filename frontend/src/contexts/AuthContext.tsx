@@ -9,6 +9,7 @@ type LoginResponse = {
 type AuthContextType = {
   token: string | null;
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   login: (data: LoginData) => Promise<void>;
   logout: () => void;
 };
@@ -21,10 +22,16 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [token, setToken] = useState<string | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken) setToken(storedToken);
+
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    setIsAuthLoading(false);
   }, []);
 
   async function login(data: LoginData) {
@@ -44,10 +51,11 @@ export function AuthProvider({ children }: Props) {
     () => ({
       token,
       isAuthenticated: Boolean(token),
+      isAuthLoading,
       login,
       logout,
     }),
-    [token]
+    [token, isAuthLoading]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

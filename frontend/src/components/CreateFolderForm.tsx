@@ -10,6 +10,7 @@ export function CreateFolderForm({ onCreate }: Props) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     if (!name.trim()) return;
 
     try {
@@ -26,12 +27,13 @@ export function CreateFolderForm({ onCreate }: Props) {
       <input
         className="input"
         type="text"
-        placeholder="Nova pasta"
+        placeholder="Nome da nova pasta"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+
       <button className="primary-button" type="submit" disabled={loading}>
-        {loading ? "Criando..." : "Criar"}
+        {loading ? "Criando..." : "Criar pasta"}
       </button>
     </form>
   );

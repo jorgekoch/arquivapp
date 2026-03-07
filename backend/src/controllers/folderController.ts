@@ -2,11 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import {
   createFolderService,
   deleteFolderService,
-  getFoldersService,
   getFolderListService,
+  getFoldersService,
+  updateFolderService,
 } from "../services/folderService";
 
-export async function createFolder(req: Request, res: Response, next: NextFunction) {
+export async function createFolder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { name } = req.body;
     const userId = req.userId!;
@@ -19,7 +24,11 @@ export async function createFolder(req: Request, res: Response, next: NextFuncti
   }
 }
 
-export async function getFolders(req: Request, res: Response, next: NextFunction) {
+export async function getFolders(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const userId = req.userId!;
 
@@ -31,7 +40,11 @@ export async function getFolders(req: Request, res: Response, next: NextFunction
   }
 }
 
-export async function getFolderList(req: Request, res: Response, next: NextFunction) {
+export async function getFolderList(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const userId = req.userId!;
 
@@ -43,7 +56,29 @@ export async function getFolderList(req: Request, res: Response, next: NextFunct
   }
 }
 
-export async function deleteFolder(req: Request, res: Response, next: NextFunction) {
+export async function updateFolder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const userId = req.userId!;
+
+    const folder = await updateFolderService(Number(id), userId, name);
+
+    res.send(folder);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteFolder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { id } = req.params;
     const userId = req.userId!;

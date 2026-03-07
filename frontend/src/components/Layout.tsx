@@ -1,23 +1,30 @@
-import { useAuth } from "../hooks/useAuth";
+import type { Profile } from "../types";
+import { UserMenu } from "./UserMenu";
 
 type Props = {
   children: React.ReactNode;
+  profile: Profile | null;
+  onProfileClick: () => void;
+  onLogout: () => void;
 };
 
-export function Layout({ children }: Props) {
-  const { logout } = useAuth();
-
+export function Layout({ children, profile, onProfileClick, onLogout }: Props) {
   return (
     <div className="app-shell">
       <header className="topbar">
         <div>
-          <h1 className="brand">Acervo Pessoal Bleize</h1>
-          <p className="subtitle">Biblioteca privada</p>
+          <p className="eyebrow">Bleize Archives</p>
+          <h1 className="brand">Bleize Archives</h1>
+          <p className="subtitle">
+            {profile ? `Bem-vindo, ${profile.name}` : "Seu acervo privado de arquivos e materiais."}
+          </p>
         </div>
 
-        <button className="ghost-button" onClick={logout}>
-          Sair
-        </button>
+        <UserMenu
+          profile={profile}
+          onProfileClick={onProfileClick}
+          onLogout={onLogout}
+        />
       </header>
 
       <main className="main-content">{children}</main>

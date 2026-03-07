@@ -2,15 +2,16 @@ import { Router } from "express";
 import {
   createFolder,
   deleteFolder,
-  getFolders,
   getFolderList,
+  getFolders,
+  updateFolder,
 } from "../controllers/folderController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import {
   validateBody,
   validateParams,
 } from "../middlewares/validateSchemaMiddleware";
-import { createFolderSchema } from "../schemas/folderSchema";
+import { createFolderSchema, updateFolderSchema } from "../schemas/folderSchema";
 import { idParamSchema } from "../schemas/paramsSchema";
 
 const router = Router();
@@ -18,6 +19,18 @@ const router = Router();
 router.post("/", authMiddleware, validateBody(createFolderSchema), createFolder);
 router.get("/list", authMiddleware, getFolderList);
 router.get("/", authMiddleware, getFolders);
-router.delete("/:id", authMiddleware, validateParams(idParamSchema), deleteFolder);
+router.patch(
+  "/:id",
+  authMiddleware,
+  validateParams(idParamSchema),
+  validateBody(updateFolderSchema),
+  updateFolder
+);
+router.delete(
+  "/:id",
+  authMiddleware,
+  validateParams(idParamSchema),
+  deleteFolder
+);
 
 export default router;
