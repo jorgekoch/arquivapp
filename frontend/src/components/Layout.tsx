@@ -11,8 +11,8 @@ export function Layout({ children }: Props) {
     <div className="app-shell">
       <header className="topbar">
         <div>
-          <h1 className="brand">Music Files</h1>
-          <p className="subtitle">Biblioteca privada de aulas</p>
+          <h1 className="brand">Acervo Pessoal Bleize</h1>
+          <p className="subtitle">Biblioteca privada</p>
         </div>
 
         <button className="ghost-button" onClick={logout}>
