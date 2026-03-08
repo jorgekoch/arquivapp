@@ -42,7 +42,9 @@ export async function deleteFolderService(folderId: number, userId: number) {
   const folder = await getOwnedFolderOrFail(folderId, userId);
 
   for (const file of folder.files) {
-    await deleteFromCloudinary(file.publicId);
+    if (file.publicId) {
+      await deleteFromCloudinary(file.publicId);
+    }
   }
 
   await folderRepository.deleteFilesByFolderId(folderId);
