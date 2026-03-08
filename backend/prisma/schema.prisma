@@ -16,7 +16,7 @@ model User {
   plan      String   @default("FREE")
   createdAt DateTime @default(now())
 
-  folders   Folder[]
+  folders Folder[]
 }
 
 model Folder {
@@ -25,7 +25,7 @@ model Folder {
   userId    Int
   createdAt DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id])
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   files File[]
 }
 
@@ -33,17 +33,18 @@ model File {
   id        Int      @id @default(autoincrement())
   name      String
   url       String
-  publicId  String
+  publicId  String?
+  size      Int?
   folderId  Int
   createdAt DateTime @default(now())
 
-  folder Folder @relation(fields: [folderId], references: [id])
+  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
 }
 
 model WaitlistLead {
-  id         Int      @id @default(autoincrement())
-  name       String?
-  email      String   @unique
-  interest   String   @default("PRO")
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  interest  String   @default("PRO")
+  createdAt DateTime @default(now())
 }

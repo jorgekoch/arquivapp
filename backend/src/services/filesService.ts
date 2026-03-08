@@ -5,6 +5,8 @@ import {
   uploadBufferToCloudinary,
   deleteFromCloudinary,
 } from "./cloudinaryService";
+import { getUserStorageUsage, getStorageLimit } from "./storageService";
+import { findUserById } from "../repositories/userRepository";
 
 export async function uploadFile(
   file: Express.Multer.File,
@@ -13,12 +15,29 @@ export async function uploadFile(
 ) {
   await getOwnedFolderOrFail(folderId, userId);
 
-  const uploaded = await uploadBufferToCloudinary(file.buffer, file.originalname);
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new AppError("Usuário não encontrado", 404);
+  }
+
+  const usedStorage = await getUserStorageUsage(userId);
+  const storageLimit = getStorageLimit(user.plan);
+
+  if (usedStorage + file.size > storageLimit) {
+    throw new AppError("Limite de armazenamento do plano atingido", 400);
+  }
+
+  const uploaded = await uploadBufferToCloudinary(
+    file.buffer,
+    file.originalname
+  );
 
   return filesRepository.createFile({
     name: file.originalname,
     url: uploaded.secure_url,
     publicId: uploaded.public_id,
+    size: file.size,
     folderId,
   });
 }
@@ -40,6 +59,9 @@ export async function deleteFile(id: number, userId: number) {
     throw new AppError("Forbidden", 403);
   }
 
-  await deleteFromCloudinary(file.publicId);
+  if (file.publicId) {
+    await deleteFromCloudinary(file.publicId);
+  }
+
   await filesRepository.deleteFileById(id);
 }
