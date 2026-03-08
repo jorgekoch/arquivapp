@@ -39,3 +39,11 @@ model File {
 
   folder Folder @relation(fields: [folderId], references: [id])
 }
+
+model WaitlistLead {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  email      String   @unique
+  interest   String   @default("PRO")
+  createdAt  DateTime @default(now())
+}
