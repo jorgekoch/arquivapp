@@ -18,7 +18,7 @@ export function Layout({ children, profile, onProfileClick, onLogout }: Props) {
           <p className="subtitle mobile-friendly-subtitle">
             {profile
               ? `Bem-vindo, ${profile.name}`
-              : "Seu acervo privado de arquivos e materiais."}
+              : "Sua biblioteca digital privada"}
           </p>
         </div>
 

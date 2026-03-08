@@ -13,7 +13,7 @@ export function PublicHeader() {
           Entrar
         </Link>
         <Link to="/register" className="primary-button">
-          Criar conta
+          Criar conta grátis
         </Link>
       </nav>
     </header>
