@@ -15,7 +15,10 @@ export const upload = multer({
       "audio/wav",
       "image/jpeg",
       "image/png",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+      "application/msword" // .doc (antigo)
     ];
+
 
     if (!allowedMimeTypes.includes(file.mimetype)) {
       return cb(new AppError("File type not allowed", 400));
