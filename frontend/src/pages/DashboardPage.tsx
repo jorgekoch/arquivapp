@@ -9,6 +9,7 @@ import { FilePanel } from "../components/FilePanel";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { EditFolderDialog } from "../components/EditFolderDialog";
 import { ProfileDialog } from "../components/ProfileDialog";
+import { StorageUsage } from "../components/StorageUsage";
 import { useAuth } from "../hooks/useAuth";
 
 const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
@@ -236,7 +237,10 @@ export function DashboardPage() {
     }
   }
 
-  async function handleUpdatePassword(currentPassword: string, newPassword: string) {
+  async function handleUpdatePassword(
+    currentPassword: string,
+    newPassword: string
+  ) {
     try {
       await api.patch("/profile/password", { currentPassword, newPassword });
       toast.success("Senha atualizada com sucesso.");
@@ -264,6 +268,8 @@ export function DashboardPage() {
       onProfileClick={() => setProfileOpen(true)}
       onLogout={logout}
     >
+      <StorageUsage />
+
       <div className="dashboard-header card">
         <CreateFolderForm onCreate={handleCreateFolder} />
       </div>

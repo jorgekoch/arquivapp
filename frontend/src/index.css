@@ -1083,6 +1083,29 @@ a {
   max-width: 460px;
 }
 
+.storage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.storage-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.storage-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.upgrade-text {
+  font-size: 13px;
+  color: var(--accent);
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 980px) {
