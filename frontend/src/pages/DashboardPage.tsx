@@ -11,7 +11,7 @@ import { EditFolderDialog } from "../components/EditFolderDialog";
 import { ProfileDialog } from "../components/ProfileDialog";
 import { useAuth } from "../hooks/useAuth";
 
-const SELECTED_FOLDER_STORAGE_KEY = "bleize:selectedFolderId";
+const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
 
 export function DashboardPage() {
   const { logout } = useAuth();

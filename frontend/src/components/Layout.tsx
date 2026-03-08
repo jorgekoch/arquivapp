@@ -13,8 +13,8 @@ export function Layout({ children, profile, onProfileClick, onLogout }: Props) {
     <div className="app-shell">
       <header className="topbar app-topbar">
         <div className="topbar-texts">
-          <p className="eyebrow">Bleize Archives</p>
-          <h1 className="brand">Bleize Archives</h1>
+          <p className="eyebrow">Arquivapp</p>
+          <h1 className="brand">Arquivapp</h1>
           <p className="subtitle mobile-friendly-subtitle">
             {profile
               ? `Bem-vindo, ${profile.name}`

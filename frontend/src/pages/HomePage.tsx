@@ -12,7 +12,7 @@ export function HomePage() {
             <p className="hero-tag">Organização inteligente para materiais de aula</p>
 
             <h2 className="hero-title">
-              Centralize arquivos, pastas e materiais no <span>Bleize Archives</span>
+              Centralize arquivos, pastas e materiais no <span>Arquivapp</span>
             </h2>
 
             <p className="hero-description">
@@ -76,7 +76,7 @@ export function HomePage() {
 
         <section className="cta-section card">
           <div>
-            <p className="eyebrow">Bleize Archives</p>
+            <p className="eyebrow">Arquivapp</p>
             <h3 className="cta-title">Pronto para organizar seu acervo?</h3>
             <p className="muted">
               Crie sua conta e comece a centralizar seus materiais agora mesmo.

@@ -40,7 +40,7 @@ export function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card card">
-        <p className="eyebrow">Bleize Archives</p>
+        <p className="eyebrow">Arquivapp</p>
         <h1>Entrar</h1>
         <p className="muted">Acesse seu acervo privado.</p>
 

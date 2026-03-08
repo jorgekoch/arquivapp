@@ -42,7 +42,7 @@ export function RegisterPage() {
   return (
     <div className="auth-page">
       <div className="auth-card card">
-        <p className="eyebrow">Bleize Archives</p>
+        <p className="eyebrow">Arquivapp</p>
         <h1>Criar conta</h1>
         <p className="muted">Crie seu acesso ao sistema.</p>
 

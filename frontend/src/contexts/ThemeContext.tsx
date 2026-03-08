@@ -10,7 +10,7 @@ type ThemeContextType = {
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
-const THEME_STORAGE_KEY = "bleize:theme";
+const THEME_STORAGE_KEY = "Arquivapp:theme";
 
 type Props = {
   children: React.ReactNode;
