@@ -27,6 +27,15 @@ export function findFilesByFolder(folderId: number) {
   });
 }
 
+export function findFileByNameInFolder(name: string, folderId: number) {
+  return prisma.file.findFirst({
+    where: {
+      name,
+      folderId,
+    },
+  });
+}
+
 export function getFileById(id: number) {
   return prisma.file.findUnique({
     where: { id },

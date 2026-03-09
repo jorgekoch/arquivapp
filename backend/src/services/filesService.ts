@@ -52,9 +52,18 @@ export async function createUploadUrl(
     throw new AppError("File type not allowed", 400);
   }
 
-  const maxFileSize = 500 * 1024 * 1024; // 500 MB por arquivo neste fluxo
+  const maxFileSize = 500 * 1024 * 1024; // 500 MB
   if (fileSize > maxFileSize) {
     throw new AppError("Arquivo excede o limite por upload", 400);
+  }
+
+  const existingFileInFolder = await filesRepository.findFileByNameInFolder(
+    fileName,
+    folderId
+  );
+
+  if (existingFileInFolder) {
+    throw new AppError("Já existe um arquivo com esse nome nesta pasta", 400);
   }
 
   const usedStorage = await getUserStorageUsage(userId);
@@ -86,6 +95,15 @@ export async function completeUpload(
 
   if (!user) {
     throw new AppError("Usuário não encontrado", 404);
+  }
+
+  const existingFileInFolder = await filesRepository.findFileByNameInFolder(
+    fileName,
+    folderId
+  );
+
+  if (existingFileInFolder) {
+    throw new AppError("Já existe um arquivo com esse nome nesta pasta", 400);
   }
 
   const usedStorage = await getUserStorageUsage(userId);
