@@ -5,6 +5,7 @@ import {
   updateUserPassword,
   updateUserProfile,
 } from "../repositories/userRepository";
+import { getStorageLimit, getUserStorageUsage } from "./storageService";
 
 export async function getProfileService(userId: number) {
   const user = await findUserById(userId);
@@ -13,11 +14,17 @@ export async function getProfileService(userId: number) {
     throw new AppError("User not found", 404);
   }
 
+  const storageUsed = await getUserStorageUsage(userId);
+  const storageLimit = getStorageLimit(user.plan);
+
   return {
     id: user.id,
     email: user.email,
     name: user.name,
     avatarUrl: user.avatarUrl,
+    plan: user.plan,
+    storageUsed,
+    storageLimit,
     createdAt: user.createdAt,
   };
 }
@@ -31,11 +38,17 @@ export async function updateProfileService(userId: number, name: string) {
 
   const updatedUser = await updateUserProfile(userId, { name });
 
+  const storageUsed = await getUserStorageUsage(userId);
+  const storageLimit = getStorageLimit(updatedUser.plan);
+
   return {
     id: updatedUser.id,
     email: updatedUser.email,
     name: updatedUser.name,
     avatarUrl: updatedUser.avatarUrl,
+    plan: updatedUser.plan,
+    storageUsed,
+    storageLimit,
     createdAt: updatedUser.createdAt,
   };
 }
@@ -71,11 +84,17 @@ export async function updateAvatarService(userId: number, avatarUrl: string) {
 
   const updatedUser = await updateUserProfile(userId, { avatarUrl });
 
+  const storageUsed = await getUserStorageUsage(userId);
+  const storageLimit = getStorageLimit(updatedUser.plan);
+
   return {
     id: updatedUser.id,
     email: updatedUser.email,
     name: updatedUser.name,
     avatarUrl: updatedUser.avatarUrl,
+    plan: updatedUser.plan,
+    storageUsed,
+    storageLimit,
     createdAt: updatedUser.createdAt,
   };
 }
