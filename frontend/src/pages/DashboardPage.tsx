@@ -195,7 +195,7 @@ export function DashboardPage() {
     }
   }
 
-  async function handleUpload(file: File) {
+    async function handleUpload(file: File) {
     if (!selectedFolderId) return;
 
     try {
@@ -232,7 +232,12 @@ export function DashboardPage() {
       await fetchFiles(selectedFolderId);
       await fetchProfile();
     } catch (err: any) {
-      toast.error(err?.response?.data?.error || "Erro ao enviar arquivo");
+      const message =
+        err?.response?.data?.error ||
+        err?.message ||
+        "Erro ao enviar arquivo";
+
+      toast.error(message);
     }
   }
 
