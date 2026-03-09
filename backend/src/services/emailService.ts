@@ -1,74 +1,45 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-type PasswordResetEmailParams = {
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+type SendPasswordResetEmailParams = {
   to: string;
   resetLink: string;
 };
 
-function getRequiredEnv(name: string) {
-  const value = process.env[name];
-
-  if (!value) {
-    throw new Error(`Variável de ambiente ausente: ${name}`);
-  }
-
-  return value;
-}
-
-function createTransporter() {
-  const host = getRequiredEnv("SMTP_HOST");
-  const port = Number(getRequiredEnv("SMTP_PORT"));
-  const user = getRequiredEnv("SMTP_USER");
-  const pass = getRequiredEnv("SMTP_PASS");
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: {
-      user,
-      pass,
-    },
-  });
-}
-
-export async function verifyEmailConnection() {
-  const transporter = createTransporter();
-  await transporter.verify();
-  console.log("SMTP do Gmail conectado com sucesso.");
-}
-
 export async function sendPasswordResetEmail({
   to,
   resetLink,
-}: PasswordResetEmailParams) {
-  const transporter = createTransporter();
-  const from = getRequiredEnv("SMTP_USER");
+}: SendPasswordResetEmailParams) {
+  const from = process.env.EMAIL_FROM!;
 
-  await transporter.sendMail({
-    from: `"Arquivapp" <${from}>`,
+  const { error } = await resend.emails.send({
+    from,
     to,
-    subject: "Recuperação de senha - Arquivapp",
+    subject: "Redefinição de senha - Arquivapp",
     html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
-        <h2>Recuperação de senha</h2>
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Redefinição de senha</h2>
         <p>Recebemos uma solicitação para redefinir sua senha no Arquivapp.</p>
-        <p>Clique no botão abaixo para criar uma nova senha:</p>
+
         <p>
-          <a
-            href="${resetLink}"
-            style="display:inline-block;padding:12px 18px;background:#b42318;color:#fff;text-decoration:none;border-radius:8px;"
-          >
+          <a href="${resetLink}" 
+             style="background:#2563eb;color:white;padding:10px 16px;text-decoration:none;border-radius:6px;">
             Redefinir senha
           </a>
         </p>
-        <p>Se preferir, você também pode copiar e colar este link no navegador:</p>
+
+        <p>Ou copie este link no navegador:</p>
+
         <p>${resetLink}</p>
-        <p>Esse link expira em 30 minutos.</p>
-        <p>Se você não solicitou essa alteração, pode ignorar este e-mail.</p>
+
+        <p>Se você não fez essa solicitação, ignore este email.</p>
       </div>
     `,
   });
 
-  console.log(`E-mail de recuperação enviado para ${to}`);
+  if (error) {
+    console.error("Erro ao enviar email com Resend:", error);
+    throw new Error("Erro ao enviar email");
+  }
 }
