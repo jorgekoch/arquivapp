@@ -1,28 +1,19 @@
 import { Router } from "express";
 import {
-  uploadFile,
+  createUploadUrl,
+  completeUpload,
   listFiles,
   deleteFile,
   getFileDownloadUrl,
 } from "../controllers/filesController";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { upload } from "../middlewares/uploadMiddleware";
-import {
-  validateBody,
-  validateParams,
-} from "../middlewares/validateSchemaMiddleware";
-import { uploadFileBodySchema } from "../schemas/fileSchema";
+import { validateParams } from "../middlewares/validateSchemaMiddleware";
 import { folderIdParamSchema, idParamSchema } from "../schemas/paramsSchema";
 
 const router = Router();
 
-router.post(
-  "/upload",
-  authMiddleware,
-  upload.single("file"),
-  validateBody(uploadFileBodySchema),
-  uploadFile
-);
+router.post("/upload-url", authMiddleware, createUploadUrl);
+router.post("/complete-upload", authMiddleware, completeUpload);
 
 router.get(
   "/folder/:folderId",

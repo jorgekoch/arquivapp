@@ -32,6 +32,31 @@ function sanitizeFileName(fileName: string) {
     .toLowerCase();
 }
 
+export function buildPrivateStorageKey(
+  originalName: string,
+  userId: number,
+  folderId: number
+) {
+  const safeName = sanitizeFileName(originalName);
+  return `users/${userId}/folders/${folderId}/${Date.now()}-${safeName}`;
+}
+
+export async function createPrivateUploadUrl(
+  key: string,
+  mimeType: string,
+  expiresIn = 300
+) {
+  const command = new PutObjectCommand({
+    Bucket: privateBucket,
+    Key: key,
+    ContentType: mimeType,
+  });
+
+  const url = await getSignedUrl(r2, command, { expiresIn });
+
+  return { url, key };
+}
+
 export async function uploadPublicFile(
   fileBuffer: Buffer,
   originalName: string,
@@ -54,28 +79,6 @@ export async function uploadPublicFile(
     key,
     url: `${publicBaseUrl}/${key}`,
   };
-}
-
-export async function uploadPrivateFile(
-  fileBuffer: Buffer,
-  originalName: string,
-  mimeType: string,
-  userId: number,
-  folderId: number
-) {
-  const safeName = sanitizeFileName(originalName);
-  const key = `users/${userId}/folders/${folderId}/${Date.now()}-${safeName}`;
-
-  await r2.send(
-    new PutObjectCommand({
-      Bucket: privateBucket,
-      Key: key,
-      Body: fileBuffer,
-      ContentType: mimeType,
-    })
-  );
-
-  return { key };
 }
 
 export async function deletePublicFile(key: string) {
