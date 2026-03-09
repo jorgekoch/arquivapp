@@ -6,6 +6,7 @@ O Arquivapp é uma aplicação full-stack que permite aos usuários enviar, orga
 
 O projeto foi desenvolvido como parte do meu processo de transição para a área de desenvolvimento de software, com foco em arquitetura moderna e boas práticas.
 
+
 🚀 Demonstração
 
 🌐 Frontend
@@ -25,6 +26,7 @@ recuperação de senha por email
 
 redefinição de senha com token temporário
 
+
 📁 Organização de arquivos
 
 criação de pastas
@@ -37,6 +39,7 @@ renomear pastas
 
 exclusão de arquivos
 
+
 ☁️ Armazenamento
 
 upload direto para object storage
@@ -47,6 +50,7 @@ limite de armazenamento por plano
 
 cálculo automático de uso de storage
 
+
 🖼️ Visualização
 
 preview de imagens
@@ -54,6 +58,7 @@ preview de imagens
 preview de PDFs
 
 download de arquivos
+
 
 👤 Perfil
 
@@ -65,24 +70,19 @@ upload de avatar
 
 visualização de uso de armazenamento
 
+
 📧 Email
 
 recuperação de senha com envio de email
 
 integração com serviço de email transacional
 
+
 🧠 Arquitetura
 
 O projeto segue uma arquitetura full-stack desacoplada.
 
-Frontend (React)
-       │
-       ▼
-Backend API (Node + Express)
-       │
-       ├── PostgreSQL (Neon)
-       ├── Object Storage (Cloudflare R2)
-       └── Email (Resend)
+
 🛠️ Tecnologias utilizadas
 Frontend
 
@@ -140,25 +140,7 @@ Render (backend)
 
 Cloudflare (DNS e CDN)
 
-📦 Estrutura do projeto
-arquivapp
-│
-├── frontend
-│   ├── components
-│   ├── pages
-│   ├── services
-│   └── hooks
-│
-├── backend
-│   ├── controllers
-│   ├── services
-│   ├── repositories
-│   ├── middlewares
-│   └── routes
-│
-└── prisma
-    ├── schema.prisma
-    └── migrations
+
 🔐 Segurança
 
 O projeto implementa diversas boas práticas:
@@ -176,8 +158,10 @@ rate limiting em endpoints sensíveis
 proteção contra acesso a arquivos de outros usuários
 
 ⚙️ Como rodar o projeto localmente
+
 1️⃣ Clonar o repositório
 git clone https://github.com/seu-usuario/arquivapp.git
+
 2️⃣ Instalar dependências
 Backend
 cd backend
@@ -185,6 +169,7 @@ npm install
 Frontend
 cd frontend
 npm install
+
 3️⃣ Configurar variáveis de ambiente
 Backend .env
 DATABASE_URL=
@@ -200,8 +185,10 @@ EMAIL_FROM=
 FRONTEND_URL=
 Frontend .env.development
 VITE_API_URL=http://localhost:4000
+
 4️⃣ Rodar migrations
 npx prisma migrate dev
+
 5️⃣ Iniciar aplicação
 
 Backend:
@@ -211,6 +198,8 @@ npm run dev
 Frontend:
 
 npm run dev
+
+
 📈 Possíveis melhorias futuras
 
 compartilhamento de arquivos por link
@@ -225,6 +214,7 @@ upload multipart para arquivos grandes
 
 versão mobile
 
+
 👨‍💻 Autor
 
 Jorge Koch
@@ -234,9 +224,11 @@ Economista em transição de carreira para desenvolvimento de software.
 LinkedIn:
 https://www.linkedin.com/in/jorgeluizkoch
 
+
 📄 Licença
 
 Este projeto está sob a licença MIT.
+
 
 ⭐ Se você gostou do projeto
 
