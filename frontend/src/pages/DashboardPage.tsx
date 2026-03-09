@@ -207,6 +207,7 @@ export function DashboardPage() {
       await api.post("/files/upload", formData);
       toast.success("Arquivo enviado com sucesso.");
       await fetchFiles(selectedFolderId);
+      await fetchProfile();
     } catch (err: any) {
       toast.error(err?.response?.data?.error || "Erro ao enviar arquivo");
     }
@@ -220,6 +221,7 @@ export function DashboardPage() {
       toast.success("Arquivo excluído com sucesso.");
       setFileToDelete(null);
       await fetchFiles(selectedFolderId);
+      await fetchProfile();
     } catch (err: any) {
       toast.error(err?.response?.data?.error || "Erro ao excluir arquivo");
       setFileToDelete(null);

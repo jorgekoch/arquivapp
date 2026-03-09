@@ -23,4 +23,8 @@ export type Profile = {
   name: string;
   avatarUrl: string | null;
   createdAt: string;
+
+  plan: "FREE" | "PRO";
+  storageUsed: number;
+  storageLimit: number;
 };

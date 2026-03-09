@@ -53,6 +53,21 @@ export function ProfileDialog({
 
   if (!open || !profile) return null;
 
+  function formatBytes(bytes: number) {
+    const mb = bytes / 1024 / 1024;
+    const gb = bytes / 1024 / 1024 / 1024;
+
+    if (gb >= 1) {
+      return `${gb.toFixed(2)} GB`;
+    }
+
+    return `${mb.toFixed(1)} MB`;
+  }
+
+  const storagePercentage = profile.storageLimit
+    ? Math.min((profile.storageUsed / profile.storageLimit) * 100, 100)
+    : 0;
+
   async function handleProfileSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -117,6 +132,27 @@ export function ProfileDialog({
             </label>
           </div>
         </div>
+
+        <div className="profile-storage-section">
+          <h4>Armazenamento</h4>
+          <p className="muted">
+            Plano atual: <strong>{profile.plan}</strong>
+          </p>
+
+          <div className="storage-bar">
+            <div
+              className="storage-fill"
+              style={{ width: `${storagePercentage}%` }}
+            />
+          </div>
+
+          <p className="muted">
+            {formatBytes(profile.storageUsed)} de{" "}
+            {formatBytes(profile.storageLimit)} utilizados
+          </p>
+        </div>
+
+        <hr className="profile-divider" />
 
         <form className="auth-form" onSubmit={handleProfileSubmit}>
           <input
