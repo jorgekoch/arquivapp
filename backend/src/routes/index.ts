@@ -7,6 +7,7 @@ import profileRoutes from "./profileRoutes";
 import waitlistRoutes from "./waitlistRoutes";
 import storageRoutes from "./storageRoutes";
 import supportRoutes from "./supportRoutes";
+import sharedFileRoutes from "./sharedFileRoutes";
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use("/profile", profileRoutes);
 router.use("/waitlist", waitlistRoutes);
 router.use("/storage", storageRoutes);
 router.use("/support", supportRoutes);
+router.use("/shared", sharedFileRoutes);
 
 export default router;

@@ -32,15 +32,16 @@ model Folder {
 }
 
 model File {
-  id         Int      @id @default(autoincrement())
-  name       String
-  url        String?
-  storageKey String
-  size       Int?
-  folderId   Int
-  createdAt  DateTime @default(now())
+  id          Int          @id @default(autoincrement())
+  name        String
+  url         String?
+  storageKey  String
+  size        Int?
+  folderId    Int
+  createdAt   DateTime     @default(now())
 
-  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folder      Folder       @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  sharedFiles SharedFile[]
 }
 
 model WaitlistLead {
@@ -49,4 +50,14 @@ model WaitlistLead {
   email     String   @unique
   interest  String   @default("PRO")
   createdAt DateTime @default(now())
+}
+
+model SharedFile {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  fileId    Int
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+
+  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }
