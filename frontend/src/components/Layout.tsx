@@ -1,5 +1,6 @@
 import type { Profile } from "../types";
 import { UserMenu } from "./UserMenu";
+import { SupportWidget } from "./SupportWidget";
 
 type Props = {
   children: React.ReactNode;
@@ -30,6 +31,8 @@ export function Layout({ children, profile, onProfileClick, onLogout }: Props) {
       </header>
 
       <main className="main-content">{children}</main>
+
+      <SupportWidget />
     </div>
   );
 }
