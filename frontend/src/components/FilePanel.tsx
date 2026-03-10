@@ -16,6 +16,14 @@ type Props = {
   onDeleteFile: (file: FileItem) => void;
 };
 
+type SortOption =
+  | "newest"
+  | "oldest"
+  | "name-asc"
+  | "name-desc"
+  | "size-desc"
+  | "size-asc";
+
 export function FilePanel({
   selectedFolder,
   files,
@@ -25,6 +33,7 @@ export function FilePanel({
   onDeleteFile,
 }: Props) {
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [previewFile, setPreviewFile] = useState<FileItem | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loadingPreviewId, setLoadingPreviewId] = useState<number | null>(null);
@@ -42,13 +51,47 @@ export function FilePanel({
     );
   }, [files, search]);
 
+  const sortedFiles = useMemo(() => {
+    const list = [...filteredFiles];
+
+    switch (sortBy) {
+      case "newest":
+        return list.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+      case "oldest":
+        return list.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+
+      case "name-asc":
+        return list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+
+      case "name-desc":
+        return list.sort((a, b) => b.name.localeCompare(a.name, "pt-BR"));
+
+      case "size-desc":
+        return list.sort((a, b) => (b.size ?? 0) - (a.size ?? 0));
+
+      case "size-asc":
+        return list.sort((a, b) => (a.size ?? 0) - (b.size ?? 0));
+
+      default:
+        return list;
+    }
+  }, [filteredFiles, sortBy]);
+
   function formatFileSize(size?: number | null) {
     if (!size) return "Tamanho desconhecido";
 
     if (size < 1024) return `${size} B`;
     if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-    if (size < 1024 * 1024 * 1024)
+    if (size < 1024 * 1024 * 1024) {
       return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    }
 
     return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;
   }
@@ -64,45 +107,56 @@ export function FilePanel({
   }
 
   function getFileIcon(fileName: string) {
-  const extension = fileName.split(".").pop()?.toLowerCase();
+    const extension = fileName.split(".").pop()?.toLowerCase();
 
-  switch (extension) {
-    case "pdf":
-      return "📄";
+    switch (extension) {
+      case "pdf":
+        return "📄";
+      case "doc":
+      case "docx":
+        return "📘";
+      case "xls":
+      case "xlsx":
+        return "📊";
+      case "ppt":
+      case "pptx":
+        return "📈";
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+      case "webp":
+        return "🖼";
+      case "mp3":
+      case "wav":
+        return "🎵";
+      case "zip":
+      case "rar":
+      case "7z":
+        return "📦";
+      case "txt":
+        return "📝";
+      default:
+        return "📁";
+    }
+  }
 
-    case "doc":
-    case "docx":
-      return "📘";
-
-    case "xls":
-    case "xlsx":
-      return "📊";
-
-    case "ppt":
-    case "pptx":
-      return "📈";
-
-    case "jpg":
-    case "jpeg":
-    case "png":
-    case "gif":
-    case "webp":
-      return "🖼";
-
-    case "mp3":
-    case "wav":
-      return "🎵";
-
-    case "zip":
-    case "rar":
-    case "7z":
-      return "📦";
-
-    case "txt":
-      return "📝";
-
-    default:
-      return "📁";
+  function getSortLabel(value: SortOption) {
+    switch (value) {
+      case "newest":
+        return "Recentes";
+      case "oldest":
+        return "Antigos";
+      case "name-asc":
+        return "Nome A-Z";
+      case "name-desc":
+        return "Nome Z-A";
+      case "size-desc":
+        return "Maior tamanho";
+      case "size-asc":
+        return "Menor tamanho";
+      default:
+        return "Ordenar";
     }
   }
 
@@ -147,7 +201,6 @@ export function FilePanel({
       await navigator.clipboard.writeText(response.data.shareUrl);
 
       setCopiedShareId(file.id);
-
       toast.success("Link de compartilhamento copiado.");
 
       setTimeout(() => {
@@ -187,6 +240,27 @@ export function FilePanel({
               Adicione, visualize e gerencie os arquivos desta pasta.
             </p>
           </div>
+
+          <div className="file-sort-compact">
+            <label className="file-sort-compact__label" htmlFor="file-sort">
+              Ordenação: 
+            </label>
+
+            <select
+              id="file-sort"
+              className="file-sort-compact__select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              aria-label="Ordenar arquivos"
+            >
+              <option value="newest">Recentes</option>
+              <option value="oldest">Antigos</option>
+              <option value="name-asc">Nome A-Z</option>
+              <option value="name-desc">Nome Z-A</option>
+              <option value="size-desc">Maior tamanho</option>
+              <option value="size-asc">Menor tamanho</option>
+            </select>
+          </div>
         </div>
 
         <UploadFileForm disabled={!selectedFolder} onUpload={onUpload} />
@@ -203,7 +277,7 @@ export function FilePanel({
 
         {loading ? (
           <LoadingSkeleton lines={5} height={62} />
-        ) : filteredFiles.length === 0 ? (
+        ) : sortedFiles.length === 0 ? (
           <EmptyState
             emoji="📄"
             title={
@@ -219,7 +293,7 @@ export function FilePanel({
           />
         ) : (
           <div className="file-list mobile-file-list">
-            {filteredFiles.map((file) => (
+            {sortedFiles.map((file) => (
               <div key={file.id} className="file-item mobile-file-item">
                 <div className="file-info">
                   <div className="file-meta">
@@ -228,12 +302,12 @@ export function FilePanel({
                       <strong className="file-name-text">{file.name}</strong>
                     </div>
 
-                    <div className="file-details">
-                      <div className="file-size-text">
+                    <div className="file-details-stack">
+                      <div className="file-size-line">
                         {formatFileSize(file.size)}
                       </div>
 
-                      <div className="file-date-text">
+                      <div className="file-date-line">
                         enviado em {formatDate(file.createdAt)}
                       </div>
                     </div>
@@ -262,9 +336,7 @@ export function FilePanel({
 
                     <button
                       className={`link-button ${
-                        copiedShareId === file.id
-                          ? "link-button-success"
-                          : ""
+                        copiedShareId === file.id ? "link-button-success" : ""
                       }`}
                       onClick={() => handleShare(file)}
                       disabled={loadingShareId === file.id}
