@@ -8,6 +8,7 @@ import waitlistRoutes from "./waitlistRoutes";
 import storageRoutes from "./storageRoutes";
 import supportRoutes from "./supportRoutes";
 import sharedFileRoutes from "./sharedFileRoutes";
+import dashboardRoutes from "./dashboardRoutes";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/waitlist", waitlistRoutes);
 router.use("/storage", storageRoutes);
 router.use("/support", supportRoutes);
 router.use("/shared", sharedFileRoutes);
+router.use("/dashboard", dashboardRoutes);
 
 export default router;
