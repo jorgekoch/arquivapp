@@ -95,11 +95,15 @@ export function FilePanel({
         <EmptyState
           emoji="🗂️"
           title="Nenhuma pasta selecionada"
-          description="Escolha uma pasta para visualizar os arquivos."
+          description="Escolha uma pasta ao lado para visualizar e organizar seus arquivos."
         />
       </section>
     );
   }
+
+  const isFolderEmpty = files.length === 0;
+  const hasSearch = search.trim().length > 0;
+  const hasNoSearchResults = !isFolderEmpty && filteredFiles.length === 0;
 
   return (
     <>
@@ -127,19 +131,17 @@ export function FilePanel({
 
         {loading ? (
           <LoadingSkeleton lines={5} height={62} />
-        ) : filteredFiles.length === 0 ? (
+        ) : isFolderEmpty ? (
           <EmptyState
-            emoji="📄"
-            title={
-              files.length === 0
-                ? "Nenhum arquivo nesta pasta"
-                : "Nenhum resultado encontrado"
-            }
-            description={
-              files.length === 0
-                ? "Envie seu primeiro arquivo para começar."
-                : "Tente buscar por outro nome de arquivo."
-            }
+            emoji="📂"
+            title="Esta pasta ainda está vazia"
+            description="Envie seu primeiro arquivo para começar a organizar tudo em um só lugar."
+          />
+        ) : hasNoSearchResults ? (
+          <EmptyState
+            emoji="🔎"
+            title="Nenhum resultado encontrado"
+            description={`Não encontramos arquivos com "${search}". Tente buscar por outro nome.`}
           />
         ) : (
           <div className="file-list mobile-file-list">
