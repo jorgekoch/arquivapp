@@ -17,12 +17,13 @@ export function HomePage() {
               <p className="landing-hero__tag">Beta público disponível</p>
 
               <h2 className="landing-hero__title">
-                Seus arquivos na nuvem, de forma <span>simples</span>.
+                Organize, proteja e acesse seus arquivos em um só lugar.
               </h2>
 
               <p className="landing-hero__description">
-                Guarde, organize e acesse documentos, PDFs e arquivos importantes
-                em um só lugar, com praticidade, privacidade e segurança.
+                O Arquivapp é um espaço simples e seguro para guardar documentos,
+                PDFs e arquivos importantes na nuvem, com organização por pastas
+                e acesso rápido no dia a dia.
               </p>
 
               <div className="landing-hero__actions">
@@ -62,24 +63,26 @@ export function HomePage() {
 
           <section className="landing-features">
             <div className="landing-feature-card">
-              <h3>Encontre tudo com mais facilidade</h3>
+              <h3>Organização sem bagunça</h3>
               <p className="muted">
-                Crie pastas e mantenha seus arquivos organizados sem bagunça.
+                Crie pastas e mantenha seus arquivos separados de forma clara e
+                fácil de encontrar.
               </p>
             </div>
 
             <div className="landing-feature-card">
-              <h3>Use sem complicação</h3>
+              <h3>Upload simples e rápido</h3>
               <p className="muted">
-                Uma interface simples e intuitiva para guardar seus arquivos
-                rapidamente.
+                Envie seus arquivos com praticidade e acompanhe tudo em uma
+                interface direta e intuitiva.
               </p>
             </div>
 
             <div className="landing-feature-card">
-              <h3>Seus arquivos, só seus</h3>
+              <h3>Privacidade e segurança</h3>
               <p className="muted">
-                Seus documentos ficam em uma área privada, protegida por login.
+                Seus arquivos ficam em uma área privada, protegida por login e
+                acesso controlado.
               </p>
             </div>
           </section>
@@ -89,7 +92,7 @@ export function HomePage() {
               <p className="eyebrow">Como funciona</p>
               <h3 className="cta-title">Comece em poucos passos</h3>
               <p className="muted">
-                O Arquivapp foi pensado para ser fácil desde o primeiro acesso.
+                O Arquivapp foi pensado para ser simples desde o primeiro acesso.
               </p>
             </div>
 
@@ -97,7 +100,7 @@ export function HomePage() {
               <div className="landing-feature-card">
                 <h3>1. Crie sua conta</h3>
                 <p className="muted">
-                  Cadastre-se gratuitamente e acesse sua área pessoal.
+                  Cadastre-se gratuitamente e acesse seu espaço pessoal.
                 </p>
               </div>
 
@@ -122,11 +125,11 @@ export function HomePage() {
             <div className="section-title-block">
               <p className="eyebrow">Ideal para</p>
               <h3 className="cta-title">
-                Um espaço simples para os arquivos do dia a dia
+                Um espaço prático para os arquivos do dia a dia
               </h3>
               <p className="muted">
                 Use o Arquivapp para manter seus arquivos importantes sempre
-                organizados e acessíveis.
+                organizados, acessíveis e protegidos.
               </p>
             </div>
 
@@ -161,9 +164,9 @@ export function HomePage() {
               <p className="eyebrow">Planos</p>
               <h3 className="cta-title">Comece grátis e evolua quando precisar</h3>
               <p className="muted">
-                O Arquivapp está disponível gratuitamente em fase Beta. O plano
-                PRO será liberado em breve com mais armazenamento e recursos
-                extras.
+                O Arquivapp já está disponível gratuitamente em fase Beta. O
+                plano PRO será liberado em breve com mais armazenamento e novos
+                recursos.
               </p>
             </div>
 
@@ -173,15 +176,15 @@ export function HomePage() {
                 <h4>Plano Gratuito</h4>
                 <p className="landing-plan-card__price">R$ 0/mês</p>
                 <p className="muted">
-                  Perfeito para começar a organizar seus arquivos.
+                  Perfeito para começar a organizar seus arquivos na nuvem.
                 </p>
 
                 <ul className="landing-plan-card__list">
                   <li>500 MB de armazenamento</li>
                   <li>Organização por pastas</li>
-                  <li>Upload simples de arquivos</li>
-                  <li>Busca de arquivos</li>
-                  <li>Perfil e tema claro/escuro</li>
+                  <li>Upload e gerenciamento de arquivos</li>
+                  <li>Busca e visualização de arquivos</li>
+                  <li>Área privada com acesso protegido</li>
                 </ul>
 
                 <Link to="/register" className="primary-button full-width">
@@ -205,7 +208,7 @@ export function HomePage() {
                 <ul className="landing-plan-card__list">
                   <li>20 GB de armazenamento</li>
                   <li>Arquivos maiores</li>
-                  <li>Mais espaço para organização</li>
+                  <li>Mais capacidade para organização</li>
                   <li>Melhor aproveitamento para uso profissional</li>
                   <li>Recursos avançados nas próximas versões</li>
                 </ul>
@@ -227,8 +230,8 @@ export function HomePage() {
                 Comece grátis e organize seus arquivos com mais facilidade
               </h3>
               <p className="muted">
-                Crie sua conta, teste o Arquivapp em fase Beta e guarde seus
-                arquivos na nuvem de forma simples e segura.
+                Crie sua conta, teste o Arquivapp em fase Beta e tenha um espaço
+                simples e seguro para guardar seus arquivos na nuvem.
               </p>
             </div>
 

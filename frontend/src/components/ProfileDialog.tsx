@@ -8,7 +8,10 @@ type Props = {
   profile: Profile | null;
   onClose: () => void;
   onUpdateProfile: (name: string) => Promise<void>;
-  onUpdatePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  onUpdatePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<void>;
   onUpdateAvatar: (file: File) => Promise<void>;
   onOpenWaitlist: () => void;
 };
@@ -143,7 +146,7 @@ export function ProfileDialog({
       return {
         title: "Seu armazenamento está praticamente cheio",
         description:
-          "Você está muito perto do limite do plano FREE. O plano PRO terá 20 GB por R$19,90/mês.",
+          "Você está muito perto do limite do plano FREE de 500 MB. O plano PRO terá 20 GB por R$19,90/mês.",
         className: "profile-storage-alert profile-storage-alert--critical",
       };
     }
@@ -152,7 +155,7 @@ export function ProfileDialog({
       return {
         title: "Seu armazenamento está quase cheio",
         description:
-          "Você já usou boa parte do seu espaço. O plano PRO terá 20 GB por R$19,90/mês.",
+          "Você já usou boa parte do seu espaço no plano FREE de 500 MB. O plano PRO terá 20 GB por R$19,90/mês.",
         className: "profile-storage-alert profile-storage-alert--warning",
       };
     }
@@ -172,12 +175,21 @@ export function ProfileDialog({
         <p className="muted">Gerencie suas informações pessoais.</p>
 
         <div className="profile-header-block">
-          <UserAvatar name={profile.name} avatarUrl={profile.avatarUrl} size={72} />
+          <UserAvatar
+            name={profile.name}
+            avatarUrl={profile.avatarUrl}
+            size={72}
+          />
 
           <div className="profile-avatar-actions">
             <label className="ghost-button avatar-upload-button">
               {loadingAvatar ? "Enviando..." : "Alterar foto"}
-              <input type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleAvatarChange}
+              />
             </label>
           </div>
         </div>
@@ -191,7 +203,9 @@ export function ProfileDialog({
 
             <span
               className={`profile-plan-badge ${
-                isFreePlan ? "profile-plan-badge--free" : "profile-plan-badge--pro"
+                isFreePlan
+                  ? "profile-plan-badge--free"
+                  : "profile-plan-badge--pro"
               }`}
             >
               {planLabel}
@@ -244,7 +258,8 @@ export function ProfileDialog({
               <div>
                 <strong>Precisa de mais espaço?</strong>
                 <p className="muted">
-                  O plano PRO terá 20 GB de armazenamento por{" "}
+                  Seu plano atual inclui <strong>500 MB</strong>. O plano PRO
+                  terá <strong>20 GB</strong> de armazenamento por{" "}
                   <strong>R$19,90/mês</strong>.
                 </p>
               </div>
@@ -271,7 +286,11 @@ export function ProfileDialog({
             onChange={(e) => setName(e.target.value)}
           />
 
-          <button className="primary-button" type="submit" disabled={loadingProfile}>
+          <button
+            className="primary-button"
+            type="submit"
+            disabled={loadingProfile}
+          >
             {loadingProfile ? "Salvando..." : "Salvar nome"}
           </button>
         </form>
@@ -285,7 +304,9 @@ export function ProfileDialog({
           <div className="theme-toggle-group">
             <button
               type="button"
-              className={`theme-option ${theme === "light" ? "active-theme-option" : ""}`}
+              className={`theme-option ${
+                theme === "light" ? "active-theme-option" : ""
+              }`}
               onClick={() => setTheme("light")}
             >
               Claro
@@ -293,7 +314,9 @@ export function ProfileDialog({
 
             <button
               type="button"
-              className={`theme-option ${theme === "dark" ? "active-theme-option" : ""}`}
+              className={`theme-option ${
+                theme === "dark" ? "active-theme-option" : ""
+              }`}
               onClick={() => setTheme("dark")}
             >
               Escuro
@@ -320,7 +343,11 @@ export function ProfileDialog({
             onChange={(e) => setNewPassword(e.target.value)}
           />
 
-          <button className="primary-button" type="submit" disabled={loadingPassword}>
+          <button
+            className="primary-button"
+            type="submit"
+            disabled={loadingPassword}
+          >
             {loadingPassword ? "Atualizando..." : "Alterar senha"}
           </button>
         </form>

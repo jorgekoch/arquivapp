@@ -49,10 +49,7 @@ export function StorageUsage() {
       </p>
 
       <div className="storage-bar">
-        <div
-          className="storage-fill"
-          style={{ width: `${percentage}%` }}
-        />
+        <div className="storage-fill" style={{ width: `${percentage}%` }} />
       </div>
 
       <p className="muted">
@@ -61,7 +58,8 @@ export function StorageUsage() {
 
       {storage.plan === "FREE" && (
         <p className="upgrade-text">
-          Precisa de mais espaço? O plano PRO será lançado em breve.
+          Seu plano atual inclui 500 MB. Precisa de mais espaço? O plano PRO
+          será lançado em breve.
         </p>
       )}
     </div>
