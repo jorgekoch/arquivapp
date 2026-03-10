@@ -626,3 +626,124 @@
     width: 100%;
   }
 }
+
+/* PROFILE */
+
+.profile-storage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--bg-secondary);
+}
+
+.profile-storage-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-storage-card__header h4 {
+  margin: 0 0 4px;
+}
+
+.profile-storage-card__header p {
+  margin: 0;
+}
+
+.profile-plan-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.profile-plan-badge--free {
+  background: var(--card);
+  color: var(--text);
+}
+
+.profile-plan-badge--pro {
+  background: var(--danger-bg);
+  color: var(--accent);
+  border-color: rgba(180, 35, 24, 0.2);
+}
+
+.profile-storage-card__summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.profile-storage-card__numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.profile-storage-card__numbers strong {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.profile-storage-card__bar {
+  margin-top: 2px;
+}
+
+.profile-storage-card__usage-text {
+  margin: 0;
+}
+
+.storage-fill-warning {
+  background: #f79009;
+}
+
+.profile-upgrade-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.profile-upgrade-callout strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.profile-upgrade-callout p {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .profile-storage-card__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-storage-card__header,
+  .profile-upgrade-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-upgrade-callout .ghost-button {
+    width: 100%;
+  }
+}

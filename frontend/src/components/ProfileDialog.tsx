@@ -10,6 +10,7 @@ type Props = {
   onUpdateProfile: (name: string) => Promise<void>;
   onUpdatePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   onUpdateAvatar: (file: File) => Promise<void>;
+  onOpenWaitlist: () => void;
 };
 
 export function ProfileDialog({
@@ -19,6 +20,7 @@ export function ProfileDialog({
   onUpdateProfile,
   onUpdatePassword,
   onUpdateAvatar,
+  onOpenWaitlist,
 }: Props) {
   const { theme, setTheme } = useTheme();
 
@@ -78,7 +80,10 @@ export function ProfileDialog({
     ? Math.min((storageUsed / storageLimit) * 100, 100)
     : 0;
 
+  const storageRemaining = Math.max(storageLimit - storageUsed, 0);
   const planLabel = profile.plan || "FREE";
+  const isFreePlan = planLabel === "FREE";
+  const isNearLimit = storagePercentage >= 80;
 
   async function handleProfileSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -125,6 +130,11 @@ export function ProfileDialog({
     e.stopPropagation();
   }
 
+  function handleOpenProWaitlist() {
+    onClose();
+    onOpenWaitlist();
+  }
+
   return (
     <div className="dialog-overlay" onClick={handleOverlayClick}>
       <div
@@ -145,27 +155,69 @@ export function ProfileDialog({
           </div>
         </div>
 
-        <div className="profile-storage-section">
-          <h4>Armazenamento</h4>
-          <p className="muted">
-            Plano atual: <strong>{planLabel}</strong>
-          </p>
+        <div className="profile-storage-card">
+          <div className="profile-storage-card__header">
+            <div>
+              <h4>Armazenamento</h4>
+              <p className="muted">Acompanhe o uso do seu plano atual.</p>
+            </div>
 
-          <div className="storage-bar">
+            <span
+              className={`profile-plan-badge ${
+                isFreePlan ? "profile-plan-badge--free" : "profile-plan-badge--pro"
+              }`}
+            >
+              {planLabel}
+            </span>
+          </div>
+
+          <div className="profile-storage-card__summary">
+            <div className="profile-storage-card__numbers">
+              <strong>{formatBytes(storageUsed)}</strong>
+              <span className="muted">usados</span>
+            </div>
+
+            <div className="profile-storage-card__numbers">
+              <strong>{formatBytes(storageRemaining)}</strong>
+              <span className="muted">disponíveis</span>
+            </div>
+
+            <div className="profile-storage-card__numbers">
+              <strong>{Math.round(storagePercentage)}%</strong>
+              <span className="muted">do plano</span>
+            </div>
+          </div>
+
+          <div className="storage-bar profile-storage-card__bar">
             <div
-              className="storage-fill"
+              className={`storage-fill ${
+                isNearLimit ? "storage-fill-warning" : ""
+              }`}
               style={{ width: `${storagePercentage}%` }}
             />
           </div>
 
-          <p className="muted">
+          <p className="muted profile-storage-card__usage-text">
             {formatBytes(storageUsed)} de {formatBytes(storageLimit)} utilizados
           </p>
 
-          {planLabel === "FREE" && (
-            <p className="upgrade-text">
-              Precisa de mais espaço? O plano PRO será lançado em breve.
-            </p>
+          {isFreePlan && (
+            <div className="profile-upgrade-callout">
+              <div>
+                <strong>Precisa de mais espaço?</strong>
+                <p className="muted">
+                  Entre na lista de interesse do plano PRO para receber novidades.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="ghost-button small"
+                onClick={handleOpenProWaitlist}
+              >
+                Quero saber do PRO
+              </button>
+            </div>
           )}
         </div>
 

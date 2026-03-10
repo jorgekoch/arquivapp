@@ -11,6 +11,7 @@ import { EditFolderDialog } from "../components/EditFolderDialog";
 import { EditFileDialog } from "../components/EditFileDialog";
 import { ProfileDialog } from "../components/ProfileDialog";
 import { OnboardingCard } from "../components/OnboardingCard";
+import { WaitlistDialog } from "../components/WaitlistDialog";
 import { useAuth } from "../hooks/useAuth";
 
 const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
@@ -23,6 +24,7 @@ export function DashboardPage() {
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
 
   const [folders, setFolders] = useState<Folder[]>([]);
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
@@ -70,10 +72,6 @@ export function DashboardPage() {
   function dismissOnboarding() {
     localStorage.setItem(ONBOARDING_DISMISSED_STORAGE_KEY, "true");
     setShowOnboarding(false);
-  }
-
-  function resetOnboardingDismissed() {
-    localStorage.removeItem(ONBOARDING_DISMISSED_STORAGE_KEY);
   }
 
   async function fetchProfile() {
@@ -270,6 +268,7 @@ export function DashboardPage() {
         storageKey: prepareResponse.data.storageKey,
       });
 
+      toast.success("Arquivo enviado com sucesso.");
       dismissOnboarding();
       await fetchFiles(selectedFolderId);
       await fetchProfile();
@@ -423,6 +422,12 @@ export function DashboardPage() {
         onUpdateProfile={handleUpdateProfile}
         onUpdatePassword={handleUpdatePassword}
         onUpdateAvatar={handleUpdateAvatar}
+        onOpenWaitlist={() => setWaitlistOpen(true)}
+      />
+
+      <WaitlistDialog
+        open={waitlistOpen}
+        onClose={() => setWaitlistOpen(false)}
       />
     </Layout>
   );
