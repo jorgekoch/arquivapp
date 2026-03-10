@@ -84,6 +84,7 @@ export function ProfileDialog({
   const planLabel = profile.plan || "FREE";
   const isFreePlan = planLabel === "FREE";
   const isNearLimit = storagePercentage >= 80;
+  const isCriticalLimit = storagePercentage >= 95;
 
   async function handleProfileSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -134,6 +135,32 @@ export function ProfileDialog({
     onClose();
     onOpenWaitlist();
   }
+
+  function getStorageAlert() {
+    if (!isFreePlan) return null;
+
+    if (isCriticalLimit) {
+      return {
+        title: "Seu armazenamento está praticamente cheio",
+        description:
+          "Você está muito perto do limite do plano FREE. O plano PRO terá 20 GB por R$19,90/mês.",
+        className: "profile-storage-alert profile-storage-alert--critical",
+      };
+    }
+
+    if (isNearLimit) {
+      return {
+        title: "Seu armazenamento está quase cheio",
+        description:
+          "Você já usou boa parte do seu espaço. O plano PRO terá 20 GB por R$19,90/mês.",
+        className: "profile-storage-alert profile-storage-alert--warning",
+      };
+    }
+
+    return null;
+  }
+
+  const storageAlert = getStorageAlert();
 
   return (
     <div className="dialog-overlay" onClick={handleOverlayClick}>
@@ -191,7 +218,11 @@ export function ProfileDialog({
           <div className="storage-bar profile-storage-card__bar">
             <div
               className={`storage-fill ${
-                isNearLimit ? "storage-fill-warning" : ""
+                isCriticalLimit
+                  ? "storage-fill-critical"
+                  : isNearLimit
+                  ? "storage-fill-warning"
+                  : ""
               }`}
               style={{ width: `${storagePercentage}%` }}
             />
@@ -201,14 +232,20 @@ export function ProfileDialog({
             {formatBytes(storageUsed)} de {formatBytes(storageLimit)} utilizados
           </p>
 
+          {storageAlert && (
+            <div className={storageAlert.className}>
+              <strong>{storageAlert.title}</strong>
+              <p>{storageAlert.description}</p>
+            </div>
+          )}
+
           {isFreePlan && (
             <div className="profile-upgrade-callout">
               <div>
                 <strong>Precisa de mais espaço?</strong>
                 <p className="muted">
-                  O plano PRO terá mais armazenamento e recursos extras.
-                  <br />
-                  <strong>Preço previsto: R$19,90/mês.</strong>
+                  O plano PRO terá 20 GB de armazenamento por{" "}
+                  <strong>R$19,90/mês</strong>.
                 </p>
               </div>
 

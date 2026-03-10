@@ -40,3 +40,55 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Custom styles for the file panel component */
+.file-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.file-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-icon {
+  font-size: 18px;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.file-size-text,
+.file-date-text {
+  display: block;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+
+.file-size-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.file-date-text {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.file-separator {
+  opacity: 0.6;
+}
+
+.link-button-success {
+  color: #12b76a;
+  font-weight: 600;
+}

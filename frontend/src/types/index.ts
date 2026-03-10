@@ -13,6 +13,7 @@ export type FileItem = {
   name: string;
   url: string | null;
   storageKey?: string;
+  size?: number | null;
   folderId: number;
   createdAt: string;
 };

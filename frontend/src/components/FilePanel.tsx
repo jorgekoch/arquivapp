@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../services/api";
 import type { FileItem, Folder } from "../types";
@@ -31,8 +31,6 @@ export function FilePanel({
   const [loadingOpenId, setLoadingOpenId] = useState<number | null>(null);
   const [loadingShareId, setLoadingShareId] = useState<number | null>(null);
   const [copiedShareId, setCopiedShareId] = useState<number | null>(null);
-  const [lastSharedUrl, setLastSharedUrl] = useState<string | null>(null);
-  const [lastSharedFileName, setLastSharedFileName] = useState<string | null>(null);
 
   const filteredFiles = useMemo(() => {
     const normalized = search.trim().toLowerCase();
@@ -44,15 +42,26 @@ export function FilePanel({
     );
   }, [files, search]);
 
-  useEffect(() => {
-    if (!copiedShareId) return;
+  function formatFileSize(size?: number | null) {
+    if (!size) return "Tamanho desconhecido";
 
-    const timeout = window.setTimeout(() => {
-      setCopiedShareId(null);
-    }, 2200);
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    if (size < 1024 * 1024 * 1024)
+      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 
-    return () => window.clearTimeout(timeout);
-  }, [copiedShareId]);
+    return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+  }
+
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
 
   async function getTemporaryFileUrl(fileId: number) {
     const response = await api.get<{ url: string }>(`/files/${fileId}/download`);
@@ -92,25 +101,20 @@ export function FilePanel({
         `/shared/${file.id}/share`
       );
 
-      const shareUrl = response.data.shareUrl;
-
-      await navigator.clipboard.writeText(shareUrl);
+      await navigator.clipboard.writeText(response.data.shareUrl);
 
       setCopiedShareId(file.id);
-      setLastSharedUrl(shareUrl);
-      setLastSharedFileName(file.name);
 
       toast.success("Link de compartilhamento copiado.");
+
+      setTimeout(() => {
+        setCopiedShareId(null);
+      }, 2000);
     } catch (err: any) {
       toast.error(err?.response?.data?.error || "Erro ao compartilhar arquivo");
     } finally {
       setLoadingShareId(null);
     }
-  }
-
-  function handleOpenSharedLink() {
-    if (!lastSharedUrl) return;
-    window.open(lastSharedUrl, "_blank", "noopener,noreferrer");
   }
 
   function handleClosePreview() {
@@ -124,14 +128,11 @@ export function FilePanel({
         <EmptyState
           emoji="🗂️"
           title="Nenhuma pasta selecionada"
-          description="Escolha uma pasta ao lado para visualizar e organizar seus arquivos."
+          description="Escolha uma pasta para visualizar os arquivos."
         />
       </section>
     );
   }
-
-  const isFolderEmpty = files.length === 0;
-  const hasNoSearchResults = files.length > 0 && filteredFiles.length === 0;
 
   return (
     <>
@@ -147,24 +148,6 @@ export function FilePanel({
 
         <UploadFileForm disabled={!selectedFolder} onUpload={onUpload} />
 
-        {lastSharedUrl && lastSharedFileName && (
-          <div className="share-feedback-banner">
-            <div>
-              <strong>Link copiado com sucesso</strong>
-              <p className="muted">
-                Arquivo compartilhado: {lastSharedFileName}
-              </p>
-            </div>
-
-            <button
-              className="ghost-button small"
-              onClick={handleOpenSharedLink}
-            >
-              Abrir link
-            </button>
-          </div>
-        )}
-
         <div className="file-toolbar">
           <input
             className="input"
@@ -177,24 +160,41 @@ export function FilePanel({
 
         {loading ? (
           <LoadingSkeleton lines={5} height={62} />
-        ) : isFolderEmpty ? (
+        ) : filteredFiles.length === 0 ? (
           <EmptyState
-            emoji="📂"
-            title="Esta pasta ainda está vazia"
-            description="Envie seu primeiro arquivo para começar a organizar tudo em um só lugar."
-          />
-        ) : hasNoSearchResults ? (
-          <EmptyState
-            emoji="🔎"
-            title="Nenhum resultado encontrado"
-            description={`Não encontramos arquivos com "${search}". Tente buscar por outro nome.`}
+            emoji="📄"
+            title={
+              files.length === 0
+                ? "Nenhum arquivo nesta pasta"
+                : "Nenhum resultado encontrado"
+            }
+            description={
+              files.length === 0
+                ? "Envie seu primeiro arquivo para começar."
+                : "Tente buscar por outro nome de arquivo."
+            }
           />
         ) : (
           <div className="file-list mobile-file-list">
             {filteredFiles.map((file) => (
               <div key={file.id} className="file-item mobile-file-item">
                 <div className="file-info">
-                  <strong className="file-name-text">{file.name}</strong>
+                  <div className="file-meta">
+                    <div className="file-title-row">
+                      <span className="file-icon">📄</span>
+                      <strong className="file-name-text">{file.name}</strong>
+                    </div>
+
+                    <div className="file-details">
+                      <div className="file-size-text">
+                        {formatFileSize(file.size)}
+                      </div>
+
+                      <div className="file-date-text">
+                        enviado em {formatDate(file.createdAt)}
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="file-links-row">
                     <button
@@ -202,7 +202,9 @@ export function FilePanel({
                       onClick={() => handlePreview(file)}
                       disabled={loadingPreviewId === file.id}
                     >
-                      {loadingPreviewId === file.id ? "Carregando..." : "Visualizar"}
+                      {loadingPreviewId === file.id
+                        ? "Carregando..."
+                        : "Visualizar"}
                     </button>
 
                     <button
@@ -210,12 +212,16 @@ export function FilePanel({
                       onClick={() => handleOpenInNewTab(file)}
                       disabled={loadingOpenId === file.id}
                     >
-                      {loadingOpenId === file.id ? "Abrindo..." : "Abrir em nova aba"}
+                      {loadingOpenId === file.id
+                        ? "Abrindo..."
+                        : "Abrir em nova aba"}
                     </button>
 
                     <button
                       className={`link-button ${
-                        copiedShareId === file.id ? "link-button-success" : ""
+                        copiedShareId === file.id
+                          ? "link-button-success"
+                          : ""
                       }`}
                       onClick={() => handleShare(file)}
                       disabled={loadingShareId === file.id}

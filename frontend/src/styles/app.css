@@ -747,3 +747,54 @@
     width: 100%;
   }
 }
+
+/* STORAGE INFO */
+.storage-fill-warning {
+  background: #f79009;
+}
+
+.storage-fill-critical {
+  background: #f04438;
+}
+
+.profile-storage-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+}
+
+.profile-storage-alert strong {
+  display: block;
+}
+
+.profile-storage-alert p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.profile-storage-alert--warning {
+  background: rgba(247, 144, 9, 0.12);
+  border-color: rgba(247, 144, 9, 0.28);
+  color: #b54708;
+}
+
+.profile-storage-alert--critical {
+  background: var(--danger-bg);
+  border-color: #fecdca;
+  color: var(--danger-text);
+}
+
+/* FILE INFO */
+.file-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.file-size-text {
+  font-size: 13px;
+  color: var(--text-muted);
+}
