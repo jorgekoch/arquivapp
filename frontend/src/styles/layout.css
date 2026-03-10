@@ -1,0 +1,90 @@
+/* APP LAYOUT */
+
+.app-shell {
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.sidebar,
+.content {
+  min-height: 420px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 20px;
+}
+
+/* TOPBAR */
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.app-topbar {
+  margin-bottom: 18px;
+}
+
+.topbar-texts {
+  min-width: 0;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* GENERIC SECTION LAYOUT */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.compact-section-header {
+  margin-bottom: 12px;
+}
+
+.compact-section-header h2 {
+  font-size: 20px;
+}
+
+.file-panel-header {
+  align-items: flex-start;
+}
+
+.section-title-block {
+  margin-bottom: 20px;
+}
+
+.center-content {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}

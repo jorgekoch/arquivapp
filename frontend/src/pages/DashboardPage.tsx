@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "../services/api";
 import type { FileItem, Folder, Profile } from "../types";
@@ -10,12 +10,16 @@ import { ConfirmDialog } from "../components/ConfirmDialog";
 import { EditFolderDialog } from "../components/EditFolderDialog";
 import { EditFileDialog } from "../components/EditFileDialog";
 import { ProfileDialog } from "../components/ProfileDialog";
+import { OnboardingCard } from "../components/OnboardingCard";
 import { useAuth } from "../hooks/useAuth";
 
 const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
+const ONBOARDING_DISMISSED_STORAGE_KEY = "Arquivapp:onboardingDismissed";
 
 export function DashboardPage() {
   const { logout } = useAuth();
+
+  const createFolderSectionRef = useRef<HTMLDivElement | null>(null);
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -30,6 +34,8 @@ export function DashboardPage() {
   const [folderToEdit, setFolderToEdit] = useState<Folder | null>(null);
   const [fileToDelete, setFileToDelete] = useState<FileItem | null>(null);
   const [fileToEdit, setFileToEdit] = useState<FileItem | null>(null);
+
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const selectedFolder = useMemo(
     () => folders.find((folder) => folder.id === selectedFolderId) || null,
@@ -55,6 +61,19 @@ export function DashboardPage() {
     if (Number.isNaN(parsed)) return null;
 
     return parsed;
+  }
+
+  function getOnboardingDismissed() {
+    return localStorage.getItem(ONBOARDING_DISMISSED_STORAGE_KEY) === "true";
+  }
+
+  function dismissOnboarding() {
+    localStorage.setItem(ONBOARDING_DISMISSED_STORAGE_KEY, "true");
+    setShowOnboarding(false);
+  }
+
+  function resetOnboardingDismissed() {
+    localStorage.removeItem(ONBOARDING_DISMISSED_STORAGE_KEY);
   }
 
   async function fetchProfile() {
@@ -128,6 +147,13 @@ export function DashboardPage() {
     saveSelectedFolderId(folderId);
   }
 
+  function handleStartOnboarding() {
+    createFolderSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   useEffect(() => {
     const storedFolderId = getStoredSelectedFolderId();
 
@@ -145,12 +171,26 @@ export function DashboardPage() {
     }
   }, [selectedFolderId]);
 
+  useEffect(() => {
+    const hasFolders = folders.length > 0;
+    const hasFiles = files.length > 0;
+    const dismissed = getOnboardingDismissed();
+
+    if (!hasFolders && !hasFiles && !dismissed) {
+      setShowOnboarding(true);
+      return;
+    }
+
+    setShowOnboarding(false);
+  }, [folders, files]);
+
   async function handleCreateFolder(name: string) {
     try {
       const response = await api.post<Folder>("/folders", { name });
       const createdFolder = response.data;
 
       toast.success("Pasta criada com sucesso.");
+      dismissOnboarding();
       await fetchFolders();
 
       setSelectedFolderId(createdFolder.id);
@@ -231,6 +271,7 @@ export function DashboardPage() {
       });
 
       toast.success("Arquivo enviado com sucesso.");
+      dismissOnboarding();
       await fetchFiles(selectedFolderId);
       await fetchProfile();
     } catch (err: any) {
@@ -314,7 +355,13 @@ export function DashboardPage() {
       onProfileClick={() => setProfileOpen(true)}
       onLogout={logout}
     >
-      <div className="dashboard-header card">
+      <OnboardingCard
+        open={showOnboarding}
+        onCreateFolderClick={handleStartOnboarding}
+        onDismiss={dismissOnboarding}
+      />
+
+      <div ref={createFolderSectionRef} className="dashboard-header card">
         <CreateFolderForm onCreate={handleCreateFolder} />
       </div>
 
