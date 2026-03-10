@@ -52,7 +52,7 @@ export async function createUploadUrl(
     throw new AppError("File type not allowed", 400);
   }
 
-  const maxFileSize = 500 * 1024 * 1024; // 500 MB
+  const maxFileSize = 500 * 1024 * 1024;
   if (fileSize > maxFileSize) {
     throw new AppError("Arquivo excede o limite por upload", 400);
   }
@@ -74,7 +74,6 @@ export async function createUploadUrl(
   }
 
   const storageKey = buildPrivateStorageKey(fileName, userId, folderId);
-
   const { url } = await createPrivateUploadUrl(storageKey, fileType);
 
   return {
@@ -125,6 +124,39 @@ export async function completeUpload(
 export async function getFilesByFolder(folderId: number, userId: number) {
   await getOwnedFolderOrFail(folderId, userId);
   return filesRepository.findFilesByFolder(folderId);
+}
+
+export async function updateFileName(
+  id: number,
+  userId: number,
+  name: string
+) {
+  const trimmedName = name.trim();
+
+  if (!trimmedName) {
+    throw new AppError("O nome do arquivo é obrigatório", 400);
+  }
+
+  const file = await filesRepository.getFileById(id);
+
+  if (!file) {
+    throw new AppError("File not found", 404);
+  }
+
+  if (file.folder.userId !== userId) {
+    throw new AppError("Forbidden", 403);
+  }
+
+  const existingFileInFolder = await filesRepository.findFileByNameInFolder(
+    trimmedName,
+    file.folderId
+  );
+
+  if (existingFileInFolder && existingFileInFolder.id !== id) {
+    throw new AppError("Já existe um arquivo com esse nome nesta pasta", 400);
+  }
+
+  return filesRepository.updateFileName(id, trimmedName);
 }
 
 export async function deleteFile(id: number, userId: number) {

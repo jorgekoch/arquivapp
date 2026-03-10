@@ -45,6 +45,13 @@ export function getFileById(id: number) {
   });
 }
 
+export function updateFileName(id: number, name: string) {
+  return prisma.file.update({
+    where: { id },
+    data: { name },
+  });
+}
+
 export function deleteFileById(id: number) {
   return prisma.file.delete({
     where: { id },

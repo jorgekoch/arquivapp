@@ -65,6 +65,28 @@ export async function listFiles(
   }
 }
 
+export async function updateFile(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const userId = req.userId!;
+
+    const updatedFile = await filesService.updateFileName(
+      Number(id),
+      userId,
+      name
+    );
+
+    res.send(updatedFile);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteFile(
   req: Request,
   res: Response,

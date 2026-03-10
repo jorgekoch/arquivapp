@@ -3,6 +3,7 @@ import {
   createUploadUrl,
   completeUpload,
   listFiles,
+  updateFile,
   deleteFile,
   getFileDownloadUrl,
 } from "../controllers/filesController";
@@ -27,6 +28,13 @@ router.get(
   authMiddleware,
   validateParams(idParamSchema),
   getFileDownloadUrl
+);
+
+router.patch(
+  "/:id",
+  authMiddleware,
+  validateParams(idParamSchema),
+  updateFile
 );
 
 router.delete(
