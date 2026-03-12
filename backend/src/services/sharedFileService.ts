@@ -3,6 +3,7 @@ import { AppError } from "../errors/AppError";
 import * as filesRepository from "../repositories/filesRepository";
 import * as sharedFileRepository from "../repositories/sharedFileRepository";
 import { generatePrivateFileUrl } from "./r2Service";
+import { findUserById } from "../repositories/userRepository";
 
 function getValidSharedFileOrThrow(sharedFile: any) {
   if (!sharedFile) {
@@ -44,6 +45,18 @@ function getMimeTypeFromFileName(fileName: string) {
 export async function createSharedFileLink(fileId: number, userId: number) {
   const file = await filesRepository.getFileById(fileId);
 
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new AppError("Usuário não encontrado", 404);
+  }
+
+  if (user.plan !== "PRO") {
+    throw new AppError(
+      "Compartilhamento disponível apenas para usuários do plano PRO",
+      403
+    );
+  }
   if (!file) {
     throw new AppError("File not found", 404);
   }

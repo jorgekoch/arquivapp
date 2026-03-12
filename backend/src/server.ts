@@ -1,3 +1,4 @@
+import "./config/env";
 import app from "./app";
 
 const PORT = process.env.PORT || 4000;
@@ -11,5 +12,9 @@ app.listen(PORT, () => {
 
   if (!process.env.EMAIL_FROM) {
     console.warn("⚠️  EMAIL_FROM não está configurado.");
+  }
+
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.warn("⚠️  STRIPE_SECRET_KEY não está configurada.");
   }
 });

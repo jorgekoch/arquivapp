@@ -12,6 +12,18 @@ export function findUserById(id: number) {
   });
 }
 
+export function findUserByStripeCustomerId(stripeCustomerId: string) {
+  return prisma.user.findFirst({
+    where: { stripeCustomerId },
+  });
+}
+
+export function findUserByStripeSubscriptionId(stripeSubscriptionId: string) {
+  return prisma.user.findFirst({
+    where: { stripeSubscriptionId },
+  });
+}
+
 export function createUser(email: string, password: string, name: string) {
   return prisma.user.create({
     data: {
@@ -36,6 +48,21 @@ export function updateUserPassword(id: number, password: string) {
   return prisma.user.update({
     where: { id },
     data: { password },
+  });
+}
+
+export function updateUserBillingData(
+  id: number,
+  data: {
+    stripeCustomerId?: string | null;
+    stripeSubscriptionId?: string | null;
+    subscriptionStatus?: string | null;
+    plan?: string;
+  }
+) {
+  return prisma.user.update({
+    where: { id },
+    data,
   });
 }
 

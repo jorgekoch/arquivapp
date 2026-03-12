@@ -9,6 +9,7 @@ import storageRoutes from "./storageRoutes";
 import supportRoutes from "./supportRoutes";
 import sharedFileRoutes from "./sharedFileRoutes";
 import dashboardRoutes from "./dashboardRoutes";
+import billingRouter from "./billingRoutes";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.use("/storage", storageRoutes);
 router.use("/support", supportRoutes);
 router.use("/shared", sharedFileRoutes);
 router.use("/dashboard", dashboardRoutes);
+router.use("/billing", billingRouter);
 
 export default router;

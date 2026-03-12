@@ -18,7 +18,23 @@ const ALLOWED_MIME_TYPES = [
   "image/png",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/msword",
+  "text/plain",
+  "text/markdown",
+  "text/csv",
+  "application/json",
+  "text/javascript",
+  "application/javascript",
+  "text/typescript",
+  "text/html",
+  "text/css",
+  "video/mp4",
+  "video/webm",
+  "audio/ogg",
+  "video/ogg",
 ];
+
+const FREE_MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+const PRO_MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
 
 type CreateUploadUrlInput = {
   folderId: number;
@@ -33,6 +49,16 @@ type CompleteUploadInput = {
   fileSize: number;
   storageKey: string;
 };
+
+function getMaxFileSizeByPlan(plan: string) {
+  return plan === "PRO" ? PRO_MAX_FILE_SIZE : FREE_MAX_FILE_SIZE;
+}
+
+function getFileSizeLimitErrorMessage(plan: string) {
+  return plan === "PRO"
+    ? "Arquivo excede o limite de 500 MB por upload"
+    : "Arquivo excede o limite de 50 MB do plano FREE";
+}
 
 export async function createUploadUrl(
   input: CreateUploadUrlInput,
@@ -52,9 +78,10 @@ export async function createUploadUrl(
     throw new AppError("File type not allowed", 400);
   }
 
-  const maxFileSize = 500 * 1024 * 1024;
+  const maxFileSize = getMaxFileSizeByPlan(user.plan);
+
   if (fileSize > maxFileSize) {
-    throw new AppError("Arquivo excede o limite por upload", 400);
+    throw new AppError(getFileSizeLimitErrorMessage(user.plan), 400);
   }
 
   const existingFileInFolder = await filesRepository.findFileByNameInFolder(
@@ -103,6 +130,12 @@ export async function completeUpload(
 
   if (existingFileInFolder) {
     throw new AppError("Já existe um arquivo com esse nome nesta pasta", 400);
+  }
+
+  const maxFileSize = getMaxFileSizeByPlan(user.plan);
+
+  if (fileSize > maxFileSize) {
+    throw new AppError(getFileSizeLimitErrorMessage(user.plan), 400);
   }
 
   const usedStorage = await getUserStorageUsage(userId);

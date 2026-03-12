@@ -14,6 +14,11 @@ model User {
   name                   String    @default("Usuário")
   avatarUrl              String?
   plan                   String    @default("FREE")
+
+  stripeCustomerId       String?
+  stripeSubscriptionId   String?
+  subscriptionStatus     String?
+
   resetPasswordToken     String?
   resetPasswordExpiresAt DateTime?
   createdAt              DateTime  @default(now())
