@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo";
 import { getCheckoutSessionStatus } from "../services/billingService";
+import { PublicLayout } from "../components/PublicLayout";
 
 type SessionState = {
   loading: boolean;
@@ -90,77 +91,70 @@ export function BillingSuccessPage() {
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-shell">
-        <section className="auth-panel auth-panel--brand">
-          <div className="auth-brand-content">
-            <BrandLogo variant="public" />
+    <PublicLayout>
+      <section className="public-auth-page">
+        <div className="public-auth-page__header">
+          <BrandLogo variant="public" />
+          <p className="eyebrow">Assinatura</p>
+          <h1 className="public-auth-page__title">{getTitle()}</h1>
+          <p className="public-auth-page__description">{getDescription()}</p>
+        </div>
 
-            <p className="auth-eyebrow">Arquivapp</p>
-
-            <h1 className="auth-brand-title">{getTitle()}</h1>
-
-            <p className="auth-brand-description">{getDescription()}</p>
+        <div className="public-auth-card public-auth-card--wide card">
+          <div className="auth-header">
+            <BrandLogo variant="dashboard" />
           </div>
-        </section>
 
-        <section className="auth-panel auth-panel--form">
-          <div className="auth-card card">
-            <div className="auth-header">
-              <BrandLogo variant="dashboard" />
+          <h1 className="auth-title">{getTitle()}</h1>
+          <p className="muted auth-subtitle">{getDescription()}</p>
+
+          {sessionState.loading && (
+            <div className="billing-status-box billing-status-box--info">
+              <strong>Verificando a sessão...</strong>
+              <p className="muted">
+                Isso pode levar alguns segundos após o retorno do checkout.
+              </p>
             </div>
+          )}
 
-            <h1 className="auth-title">{getTitle()}</h1>
-            <p className="muted auth-subtitle">{getDescription()}</p>
+          {!sessionState.loading && sessionState.paymentStatus === "paid" && (
+            <div className="billing-status-box billing-status-box--success">
+              <strong>Plano PRO confirmado</strong>
+              <p>
+                Acesse seu dashboard para verificar o novo limite de armazenamento e os recursos liberados.
+              </p>
+            </div>
+          )}
 
-            {sessionState.loading && (
-              <div className="billing-status-box billing-status-box--info">
-                <strong>Verificando a sessão...</strong>
-                <p className="muted">
-                  Isso pode levar alguns segundos após o retorno do checkout.
-                </p>
-              </div>
-            )}
-
-            {!sessionState.loading && sessionState.paymentStatus === "paid" && (
-              <div className="billing-status-box billing-status-box--success">
-                <strong>Plano PRO confirmado</strong>
-                <p>
-                  Acesse seu dashboard para verificar o novo limite de armazenamento e os recursos liberados.
-                </p>
-              </div>
-            )}
-
-            {!sessionState.loading &&
-              !sessionState.error &&
-              sessionState.paymentStatus !== "paid" && (
-                <div className="billing-status-box billing-status-box--warning">
-                  <strong>Pagamento em processamento</strong>
-                  <p>
-                    Seu plano pode levar alguns instantes para refletir no sistema.
-                  </p>
-                </div>
-              )}
-
-            {!sessionState.loading && sessionState.error && (
+          {!sessionState.loading &&
+            !sessionState.error &&
+            sessionState.paymentStatus !== "paid" && (
               <div className="billing-status-box billing-status-box--warning">
-                <strong>Confirmação ainda não concluída</strong>
-                <p>{sessionState.error}</p>
+                <strong>Pagamento em processamento</strong>
+                <p>
+                  Seu plano pode levar alguns instantes para refletir no sistema.
+                </p>
               </div>
             )}
 
-            <div className="auth-form">
-              <Link to="/dashboard" className="primary-button full-width">
-                Ir para o dashboard
-              </Link>
-
-              <Link to="/" className="ghost-button full-width">
-                Voltar para a página inicial
-              </Link>
+          {!sessionState.loading && sessionState.error && (
+            <div className="billing-status-box billing-status-box--warning">
+              <strong>Confirmação ainda não concluída</strong>
+              <p>{sessionState.error}</p>
             </div>
+          )}
+
+          <div className="auth-form">
+            <Link to="/dashboard" className="primary-button full-width">
+              Ir para o dashboard
+            </Link>
+
+            <Link to="/" className="ghost-button full-width">
+              Voltar para a página inicial
+            </Link>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      </section>
+    </PublicLayout>
   );
 }

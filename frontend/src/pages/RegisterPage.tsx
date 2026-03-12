@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import { BrandLogo } from "../components/BrandLogo";
+import { PublicLayout } from "../components/PublicLayout";
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -41,85 +42,75 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-shell">
-        <section className="auth-panel auth-panel--brand">
-          <div className="auth-brand-content">
-            <BrandLogo variant="public" />
+    <PublicLayout>
+      <section className="public-auth-page">
+        <div className="public-auth-page__header">
+          <BrandLogo variant="public" />
+          <p className="eyebrow">Cadastro</p>
+          <h1 className="public-auth-page__title">Crie sua conta no Arquivapp</h1>
+          <p className="public-auth-page__description">
+            Organize documentos, PDFs e arquivos importantes com segurança, praticidade e acesso simples.
+          </p>
+        </div>
 
-            <p className="auth-eyebrow">Arquivapp</p>
-
-            <h1 className="auth-brand-title">
-              Crie sua conta e centralize seus arquivos em um só lugar.
-            </h1>
-
-            <p className="auth-brand-description">
-              Organize documentos, PDFs e arquivos importantes com segurança,
-              praticidade e acesso simples.
-            </p>
+        <div className="public-auth-card card">
+          <div className="auth-header">
+            <BrandLogo variant="dashboard" />
           </div>
-        </section>
 
-        <section className="auth-panel auth-panel--form">
-          <div className="auth-card card">
-            <div className="auth-header">
-              <BrandLogo variant="dashboard" />
-            </div>
+          <h1 className="auth-title">Criar conta</h1>
+          <p className="muted auth-subtitle">Crie seu acesso ao sistema.</p>
 
-            <h1 className="auth-title">Criar conta</h1>
-            <p className="muted auth-subtitle">Crie seu acesso ao sistema.</p>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <input
+              className="input"
+              type="text"
+              placeholder="Nome de usuário"
+              value={form.name}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, name: e.target.value }))
+              }
+            />
 
-            <form className="auth-form" onSubmit={handleSubmit}>
-              <input
-                className="input"
-                type="text"
-                placeholder="Nome de usuário"
-                value={form.name}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, name: e.target.value }))
-                }
-              />
+            <input
+              className="input"
+              type="email"
+              placeholder="E-mail"
+              value={form.email}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, email: e.target.value }))
+              }
+            />
 
-              <input
-                className="input"
-                type="email"
-                placeholder="E-mail"
-                value={form.email}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, email: e.target.value }))
-                }
-              />
+            <input
+              className="input"
+              type="password"
+              placeholder="Senha"
+              value={form.password}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, password: e.target.value }))
+              }
+            />
 
-              <input
-                className="input"
-                type="password"
-                placeholder="Senha"
-                value={form.password}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, password: e.target.value }))
-                }
-              />
+            {error && <p className="feedback-inline-error">{error}</p>}
 
-              {error && <p className="feedback-inline-error">{error}</p>}
+            <button className="primary-button full-width" disabled={loading}>
+              {loading ? "Criando..." : "Criar conta"}
+            </button>
+          </form>
 
-              <button className="primary-button full-width" disabled={loading}>
-                {loading ? "Criando..." : "Criar conta"}
-              </button>
-            </form>
-
-            <p className="muted auth-link-text">
-              Já possui conta?{" "}
-              <Link to="/login" className="auth-link-highlight">
-                Entrar
-              </Link>
-            </p>
-
-            <Link to="/" className="auth-back-link">
-              ← Voltar para a página inicial
+          <p className="muted auth-link-text">
+            Já possui conta?{" "}
+            <Link to="/login" className="auth-link-highlight">
+              Entrar
             </Link>
-          </div>
-        </section>
-      </div>
-    </div>
+          </p>
+
+          <Link to="/" className="auth-back-link">
+            ← Voltar para a página inicial
+          </Link>
+        </div>
+      </section>
+    </PublicLayout>
   );
 }
