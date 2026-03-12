@@ -302,6 +302,8 @@ export function FilePreviewDialog({ open, file, fileUrl, onClose }: Props) {
       return;
     }
 
+    const currentFileUrl = fileUrl;
+
     const needsTextFetch =
       previewType === "text" ||
       previewType === "markdown" ||
@@ -352,7 +354,7 @@ export function FilePreviewDialog({ open, file, fileUrl, onClose }: Props) {
           return;
         }
 
-        const response = await fetch(safeFileUrl);
+        const response = await fetch(currentFileUrl);
 
         if (!response.ok) {
           throw new Error("Não foi possível carregar o conteúdo do arquivo.");
@@ -658,7 +660,7 @@ export function FilePreviewDialog({ open, file, fileUrl, onClose }: Props) {
         <div className="preview-body">{renderPreview()}</div>
 
         <a
-          href={fileUrl}
+          href={safeFileUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="ghost-button preview-open-link"
