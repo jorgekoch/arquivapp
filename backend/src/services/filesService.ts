@@ -17,6 +17,7 @@ const ALLOWED_MIME_TYPES = [
   "audio/ogg",
   "image/jpeg",
   "image/png",
+  "image/gif",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -33,6 +34,42 @@ const ALLOWED_MIME_TYPES = [
   "video/mp4",
   "video/webm",
   "video/ogg",
+
+  // Compactados
+  "application/zip",
+  "application/x-zip-compressed",
+  "application/vnd.rar",
+  "application/x-rar-compressed",
+  "application/x-7z-compressed",
+];
+
+const ALLOWED_EXTENSIONS = [
+  "pdf",
+  "mp3",
+  "wav",
+  "ogg",
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "txt",
+  "md",
+  "markdown",
+  "csv",
+  "json",
+  "js",
+  "ts",
+  "html",
+  "css",
+  "mp4",
+  "webm",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx",
+  "zip",
+  "rar",
+  "7z",
 ];
 
 const FREE_MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
@@ -62,6 +99,22 @@ function getFileSizeLimitErrorMessage(plan: string) {
     : "Arquivo excede o limite de 50 MB do plano FREE";
 }
 
+function getFileExtension(fileName: string) {
+  return fileName.split(".").pop()?.toLowerCase() || "";
+}
+
+function validateFileType(fileName: string, fileType: string) {
+  const fileExtension = getFileExtension(fileName);
+  const normalizedFileType = fileType?.trim() || "";
+
+  const isMimeAllowed = ALLOWED_MIME_TYPES.includes(normalizedFileType);
+  const isExtensionAllowed = ALLOWED_EXTENSIONS.includes(fileExtension);
+
+  if (!isMimeAllowed && !isExtensionAllowed) {
+    throw new AppError("File type not allowed", 400);
+  }
+}
+
 export async function createUploadUrl(
   input: CreateUploadUrlInput,
   userId: number
@@ -76,9 +129,7 @@ export async function createUploadUrl(
     throw new AppError("Usuário não encontrado", 404);
   }
 
-  if (!ALLOWED_MIME_TYPES.includes(fileType)) {
-    throw new AppError("File type not allowed", 400);
-  }
+  validateFileType(fileName, fileType);
 
   const maxFileSize = getMaxFileSizeByPlan(user.plan);
 
