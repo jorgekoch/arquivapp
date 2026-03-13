@@ -10,6 +10,7 @@ import supportRoutes from "./supportRoutes";
 import sharedFileRoutes from "./sharedFileRoutes";
 import dashboardRoutes from "./dashboardRoutes";
 import billingRouter from "./billingRoutes";
+import folderShareRoutes from "./folderShareRoutes";
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use("/support", supportRoutes);
 router.use("/shared", sharedFileRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/billing", billingRouter);
+router.use("/folder-shares", folderShareRoutes);
 
 export default router;

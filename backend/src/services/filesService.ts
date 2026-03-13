@@ -9,6 +9,7 @@ import {
 } from "./r2Service";
 import { getUserStorageUsage, getStorageLimit } from "./storageService";
 import { findUserById } from "../repositories/userRepository";
+import { ensureUserCanAccessFolder } from "./folderAccessService";
 
 const ALLOWED_MIME_TYPES = [
   "application/pdf",
@@ -34,8 +35,6 @@ const ALLOWED_MIME_TYPES = [
   "video/mp4",
   "video/webm",
   "video/ogg",
-
-  // Compactados
   "application/zip",
   "application/x-zip-compressed",
   "application/vnd.rar",
@@ -72,8 +71,8 @@ const ALLOWED_EXTENSIONS = [
   "7z",
 ];
 
-const FREE_MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
-const PRO_MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
+const FREE_MAX_FILE_SIZE = 50 * 1024 * 1024;
+const PRO_MAX_FILE_SIZE = 500 * 1024 * 1024;
 
 type CreateUploadUrlInput = {
   folderId: number;
@@ -208,7 +207,7 @@ export async function completeUpload(
 }
 
 export async function getFilesByFolder(folderId: number, userId: number) {
-  await getOwnedFolderOrFail(folderId, userId);
+  await ensureUserCanAccessFolder(folderId, userId);
   return filesRepository.findFilesByFolder(folderId);
 }
 
@@ -301,9 +300,7 @@ export async function getFileDownloadUrl(id: number, userId: number) {
     throw new AppError("File not found", 404);
   }
 
-  if (file.folder.userId !== userId) {
-    throw new AppError("Forbidden", 403);
-  }
+  await ensureUserCanAccessFolder(file.folderId, userId);
 
   return generatePrivateFileUrl(file.storageKey);
 }

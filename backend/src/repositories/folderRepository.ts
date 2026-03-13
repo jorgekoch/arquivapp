@@ -9,30 +9,45 @@ export function createFolder(name: string, userId: number) {
   });
 }
 
-export function getFoldersByUserId(userId: number) {
-  return prisma.folder.findMany({
-    where: {
-      userId,
-    },
-    orderBy: {
-      createdAt: "desc",
+export async function getFoldersByUserId(userId: number) {
+  const folders = await prisma.folder.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: {
+          shares: true,
+        },
+      },
     },
   });
+
+  return folders.map((folder) => ({
+    id: folder.id,
+    name: folder.name,
+    createdAt: folder.createdAt,
+    shareCount: folder._count.shares,
+  }));
 }
 
-export function getFolderListByUserId(userId: number) {
-  return prisma.folder.findMany({
-    where: {
-      userId,
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-    orderBy: {
-      name: "asc",
+export async function getFolderListByUserId(userId: number) {
+  const folders = await prisma.folder.findMany({
+    where: { userId },
+    orderBy: { name: "asc" },
+    include: {
+      _count: {
+        select: {
+          shares: true,
+        },
+      },
     },
   });
+
+  return folders.map((folder) => ({
+    id: folder.id,
+    name: folder.name,
+    shareCount: folder._count.shares,
+  }));
 }
 
 export function getFolderById(id: number) {

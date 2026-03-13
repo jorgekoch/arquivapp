@@ -15,13 +15,27 @@ export async function getDashboardInit(
     throw new AppError("Usuário não encontrado", 404);
   }
 
-  const [folders, usedStorage] = await Promise.all([
+  const [foldersRaw, usedStorage] = await Promise.all([
     prisma.folder.findMany({
       where: { userId },
       orderBy: { createdAt: "asc" },
+      include: {
+        _count: {
+          select: {
+            shares: true,
+          },
+        },
+      },
     }),
     getUserStorageUsage(userId),
   ]);
+
+  const folders = foldersRaw.map((folder) => ({
+    id: folder.id,
+    name: folder.name,
+    createdAt: folder.createdAt,
+    shareCount: folder._count.shares,
+  }));
 
   const storageLimit = getStorageLimit(user.plan);
 

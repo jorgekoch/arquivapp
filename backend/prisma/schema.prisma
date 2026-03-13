@@ -8,22 +8,24 @@ datasource db {
 }
 
 model User {
-  id                     Int       @id @default(autoincrement())
-  email                  String    @unique
-  password               String
-  name                   String    @default("Usuário")
-  avatarUrl              String?
-  plan                   String    @default("FREE")
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  name      String  @default("Usuário")
+  avatarUrl String?
+  plan      String  @default("FREE")
 
-  stripeCustomerId       String?
-  stripeSubscriptionId   String?
-  subscriptionStatus     String?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  subscriptionStatus   String?
 
   resetPasswordToken     String?
   resetPasswordExpiresAt DateTime?
   createdAt              DateTime  @default(now())
 
-  folders Folder[]
+  folders              Folder[]
+  ownedFolderShares    FolderShare[] @relation("FolderShareOwner")
+  receivedFolderShares FolderShare[] @relation("FolderShareRecipient")
 }
 
 model Folder {
@@ -32,18 +34,19 @@ model Folder {
   userId    Int
   createdAt DateTime @default(now())
 
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  files File[]
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  files  File[]
+  shares FolderShare[]
 }
 
 model File {
-  id          Int          @id @default(autoincrement())
-  name        String
-  url         String?
-  storageKey  String
-  size        Int?
-  folderId    Int
-  createdAt   DateTime     @default(now())
+  id         Int      @id @default(autoincrement())
+  name       String
+  url        String?
+  storageKey String
+  size       Int?
+  folderId   Int
+  createdAt  DateTime @default(now())
 
   folder      Folder       @relation(fields: [folderId], references: [id], onDelete: Cascade)
   sharedFiles SharedFile[]
@@ -58,11 +61,27 @@ model WaitlistLead {
 }
 
 model SharedFile {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
   fileId    Int
   expiresAt DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+model FolderShare {
+  id               Int      @id @default(autoincrement())
+  folderId         Int
+  ownerUserId      Int
+  sharedWithUserId Int
+  role             String   @default("viewer")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  folder         Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  ownerUser      User   @relation("FolderShareOwner", fields: [ownerUserId], references: [id], onDelete: Cascade)
+  sharedWithUser User   @relation("FolderShareRecipient", fields: [sharedWithUserId], references: [id], onDelete: Cascade)
+
+  @@unique([folderId, sharedWithUserId])
 }
