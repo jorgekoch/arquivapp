@@ -7,7 +7,7 @@ import {
 } from "../services/folderShareService";
 
 export async function createFolderShareController(req: Request, res: Response) {
-  const currentUserId = req.userId!;
+  const currentUserId = req.userId;
   const { folderId, email } = req.body;
 
   const share = await shareFolder({
