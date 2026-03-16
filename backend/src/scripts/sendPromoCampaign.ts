@@ -12,7 +12,7 @@ const DELAY_MS = 500;
 
 // true = envia só para o email de teste abaixo
 // false = envia para usuários FREE reais do banco
-const TEST_MODE = true;
+const TEST_MODE = false;
 
 const TEST_RECIPIENT = {
   email: "jorgeluizkoch@gmail.com",
