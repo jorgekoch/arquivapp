@@ -1,8 +1,8 @@
+import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { WaitlistDialog } from "../components/WaitlistDialog";
 import { PublicLayout } from "../components/PublicLayout";
-import { HowItWorks } from "../components/HowItWorks";
 import { FilePreviewFeatures } from "../components/FilePreviewFeatures";
 
 export function HomePage() {
@@ -10,19 +10,36 @@ export function HomePage() {
 
   return (
     <>
+      <Helmet>
+        <title>Arquivapp | Organize e compartilhe arquivos com segurança</title>
+        <meta
+          name="description"
+          content="Arquivapp é uma plataforma para organizar arquivos, armazenar documentos na nuvem, compartilhar pastas e acessar conteúdos com praticidade e segurança."
+        />
+        <meta
+          property="og:title"
+          content="Arquivapp | Organize e compartilhe arquivos com segurança"
+        />
+        <meta
+          property="og:description"
+          content="Organize arquivos, compartilhe pastas e acesse documentos com praticidade usando o Arquivapp."
+        />
+        <meta property="og:url" content="https://arquivapp.com.br" />
+      </Helmet>
+
       <PublicLayout>
         <section className="landing-hero">
           <div className="landing-hero__content">
             <p className="landing-hero__tag">Beta público disponível</p>
 
-            <h2 className="landing-hero__title">
+            <h1 className="landing-hero__title">
               Organize, proteja e acesse seus arquivos em um só lugar.
-            </h2>
+            </h1>
 
             <p className="landing-hero__description">
               O Arquivapp é um espaço simples e seguro para guardar documentos,
-              PDFs e arquivos importantes na nuvem, com organização por pastas
-              e acesso rápido no dia a dia.
+              PDFs e arquivos importantes na nuvem, com organização por pastas,
+              visualização rápida e acesso prático no dia a dia.
             </p>
 
             <div className="landing-hero__actions">
@@ -86,15 +103,49 @@ export function HomePage() {
           </div>
         </section>
 
-        <HowItWorks />
+        <section className="landing-section card">
+          <div className="section-title-block">
+            <p className="eyebrow">Como funciona</p>
+            <h2 className="cta-title">
+              Uma forma simples de armazenar arquivos online e manter tudo organizado
+            </h2>
+            <p className="muted">
+              O Arquivapp foi criado para quem precisa guardar documentos,
+              organizar pastas e acessar arquivos importantes com mais praticidade.
+            </p>
+          </div>
+
+          <div className="landing-rich-text">
+            <p>
+              Com o Arquivapp, você pode armazenar arquivos na nuvem, separar
+              conteúdos por pastas, localizar documentos com facilidade e manter
+              materiais importantes sempre acessíveis. A plataforma foi pensada
+              para oferecer uma experiência simples, direta e segura.
+            </p>
+
+            <p>
+              Seja para uso pessoal, estudos, trabalho ou rotina profissional,
+              o Arquivapp ajuda a centralizar documentos, PDFs, imagens e outros
+              arquivos em um só lugar. Isso reduz bagunça, melhora a organização
+              e facilita o compartilhamento quando necessário.
+            </p>
+          </div>
+
+          <div className="landing-hero__actions">
+            <Link to="/features" className="ghost-button">
+              Ver todos os recursos
+            </Link>
+          </div>
+        </section>
+
         <FilePreviewFeatures />
 
         <section className="landing-section">
           <div className="section-title-block">
             <p className="eyebrow">Ideal para</p>
-            <h3 className="cta-title">
+            <h2 className="cta-title">
               Um espaço prático para os arquivos do dia a dia
-            </h3>
+            </h2>
             <p className="muted">
               Use o Arquivapp para manter seus arquivos importantes sempre
               organizados, acessíveis e protegidos.
@@ -127,21 +178,47 @@ export function HomePage() {
           </div>
         </section>
 
+        <section className="landing-section card">
+          <div className="section-title-block">
+            <p className="eyebrow">Por que usar</p>
+            <h2 className="cta-title">Mais praticidade para organizar e compartilhar arquivos</h2>
+            <p className="muted">
+              O Arquivapp ajuda você a manter uma rotina mais organizada com
+              armazenamento online, visualização de arquivos e estrutura por pastas.
+            </p>
+          </div>
+
+          <div className="landing-rich-text">
+            <p>
+              Se você procura uma solução para armazenar arquivos online,
+              compartilhar documentos ou organizar arquivos na nuvem de forma
+              simples, o Arquivapp oferece uma experiência clara e fácil de usar.
+            </p>
+
+            <p>
+              A proposta do Arquivapp é unir organização, praticidade e
+              segurança em uma plataforma acessível para quem quer centralizar
+              arquivos e reduzir a dependência de ferramentas confusas ou
+              excessivamente complexas.
+            </p>
+          </div>
+        </section>
+
         <section className="landing-plans">
           <div className="section-title-block">
             <p className="eyebrow">Planos</p>
-            <h3 className="cta-title">Comece grátis e evolua quando precisar</h3>
+            <h2 className="cta-title">Comece grátis e evolua quando precisar</h2>
             <p className="muted">
               O Arquivapp já está disponível gratuitamente em fase Beta. O plano
-              PRO será liberado em breve com mais armazenamento, compartilhamento
-              por link e recursos pensados para um uso mais profissional.
+              PRO oferece mais armazenamento, compartilhamento por link e
+              recursos pensados para um uso mais profissional.
             </p>
           </div>
 
           <div className="landing-plans__grid">
             <div className="landing-plan-card">
               <p className="landing-plan-card__badge">FREE</p>
-              <h4>Plano Gratuito</h4>
+              <h3>Plano Gratuito</h3>
               <p className="landing-plan-card__price">R$ 0/mês</p>
               <p className="muted">
                 Ideal para começar a organizar seus arquivos na nuvem.
@@ -164,13 +241,14 @@ export function HomePage() {
               <p className="landing-plan-card__badge landing-plan-card__badge--pro">
                 PRO
               </p>
-              <h4>Plano Pro</h4>
+              <h3>Plano Pro</h3>
               <p className="plan-price">
                 R$19,90/mês
                 <span className="plan-price-note"> (em breve)</span>
               </p>
               <p className="muted">
-                Mais espaço e recursos para quem precisa usar o Arquivapp de forma mais avançada.
+                Mais espaço e recursos para quem precisa usar o Arquivapp de
+                forma mais avançada.
               </p>
 
               <ul className="landing-plan-card__list">
@@ -194,9 +272,9 @@ export function HomePage() {
         <section className="landing-cta card">
           <div>
             <p className="eyebrow">Arquivapp</p>
-            <h3 className="cta-title">
+            <h2 className="cta-title">
               Comece grátis e organize seus arquivos com mais facilidade
-            </h3>
+            </h2>
             <p className="muted">
               Crie sua conta, teste o Arquivapp em fase Beta e tenha um espaço
               simples e seguro para guardar seus arquivos na nuvem.

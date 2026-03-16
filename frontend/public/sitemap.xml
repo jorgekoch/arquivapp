@@ -2,27 +2,65 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-<url>
-<loc>https://arquivapp.com.br/</loc>
-<priority>1.0</priority>
-</url>
+  <url>
+    <loc>https://arquivapp.com.br/</loc>
+    <priority>1.0</priority>
+  </url>
 
-<url>
-<loc>https://arquivapp.com.br/about</loc>
-<priority>0.8</priority>
-</url>
+  <url>
+    <loc>https://arquivapp.com.br/features</loc>
+    <priority>0.9</priority>
+  </url>
 
-<url>
-<loc>https://arquivapp.com.br/contact</loc>
-<priority>0.8</priority>
-</url>
+  <url>
+    <loc>https://arquivapp.com.br/about</loc>
+    <priority>0.8</priority>
+  </url>
 
-<url>
-<loc>https://arquivapp.com.br/login</loc>
-</url>
+  <url>
+    <loc>https://arquivapp.com.br/contact</loc>
+    <priority>0.8</priority>
+  </url>
 
-<url>
-<loc>https://arquivapp.com.br/register</loc>
-</url>
+  <url>
+    <loc>https://arquivapp.com.br/terms</loc>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/privacy</loc>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/login</loc>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/register</loc>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/armazenamento-de-arquivos-online</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/compartilhar-pastas-online</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/armazenar-documentos-online</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://arquivapp.com.br/organizar-arquivos-na-nuvem</loc>
+    <priority>0.9</priority>
+  </url>
+
 
 </urlset>

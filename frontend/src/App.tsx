@@ -16,6 +16,11 @@ import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
 import { TermsPage } from "./pages/TermsPage";
 import { PrivacyPage } from "./pages/PrivacyPage";
+import { FeaturesPage } from "./pages/FeaturesPage";
+import { StoragePage } from "./pages/StoragePage";
+import { ShareFoldersPage } from "./pages/ShareFoldersPage";
+import { StoreDocumentsPage } from "./pages/StoreDocumentsPage";
+import { OrganizeCloudDocumentsPage } from "./pages/OrganizeCloudDocumentsPage";
 
 export default function App() {
   return (
@@ -39,6 +44,11 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/armazenamento-de-arquivos-online" element={<StoragePage />} />
+            <Route path="/compartilhar-pastas-online" element={<ShareFoldersPage />} />
+            <Route path="/armazenar-documentos-online" element={<StoreDocumentsPage />} />
+            <Route path="/organizar-arquivos-na-nuvem" element={<OrganizeCloudDocumentsPage />} />
 
             <Route
               path="/login"
