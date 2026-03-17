@@ -15,6 +15,7 @@ import { createProCheckoutSession } from "../services/billingService";
 import { ShareFolderDialog } from "../components/ShareFolderDialog";
 import { getFolderShares, getSharedFolders, removeFolderShare, shareFolder, shareFolder as shareFolderRequest } from "../services/folderShareService";
 import { UpgradeOfferDialog } from "../components/UpgradeOfferDialog";
+import { UpgradeProDialog } from "../components/UpgradeProDialog";
 
 const UPGRADE_OFFER_DISMISSED_KEY = "Arquivapp:upgradeOfferDismissedAt";
 const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
@@ -70,6 +71,7 @@ export function DashboardPage() {
   const [selectedFolderMeta, setSelectedFolderMeta] = useState<{isShared: boolean; ownerName?: string} | null>(null);
   const [showProFeatureDialog, setShowProFeatureDialog] = useState(false);
   const [showUpgradeOffer, setShowUpgradeOffer] = useState(false);
+  const [ upgradeOpen, setUpgradeOpen ] = useState(false);
 
   const selectedFolder = useMemo(() => {
     const ownedFolder =
@@ -348,7 +350,7 @@ export function DashboardPage() {
 
   async function handleShareFolder(folder: Folder) {
     if (profile?.plan !== "PRO") {
-      toast("Compartilhamento de pastas é um recurso do plano PRO.");
+      setUpgradeOpen(true);
       return;
     }
 
@@ -875,6 +877,11 @@ export function DashboardPage() {
       open={showUpgradeOffer}
       onClose={handleCloseUpgradeDialog}
       onUpgrade={handleUpgradeToPro}
+    />
+    <UpgradeProDialog
+      open={upgradeOpen}
+      onClose={() => setUpgradeOpen(false)}
+      onConfirm={handleUpgradeToPro}
     />
   </Layout>
 );
