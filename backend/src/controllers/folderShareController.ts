@@ -7,6 +7,7 @@ import {
   removeFolderShare,
   shareFolder,
 } from "../services/folderShareService";
+import { AppError } from "../errors/AppError";
 
 export async function createFolderShareController(req: Request, res: Response) {
   const currentUserId = req.userId!;
@@ -57,7 +58,11 @@ export async function getFolderInviteByTokenController(
   req: Request,
   res: Response
 ) {
-  const token = req.params.token;
+    const token = req.params.token;
+
+    if (!token || Array.isArray(token)) {
+      throw new AppError("Token inválido", 400);
+    }
 
   const invite = await getFolderInviteByToken(token);
 
@@ -69,7 +74,11 @@ export async function acceptFolderInviteController(
   res: Response
 ) {
   const currentUserId = req.userId!;
-  const token = req.params.token;
+    const token = req.params.token;
+
+    if (!token || Array.isArray(token)) {
+      throw new AppError("Token inválido", 400);
+    }
 
   const result = await acceptFolderInvite(token, currentUserId);
 

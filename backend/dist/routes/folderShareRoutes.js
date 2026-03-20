@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const folderShareController_1 = require("../controllers/folderShareController");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const router = (0, express_1.Router)();
+router.get("/folder-share-invites/:token", folderShareController_1.getFolderInviteByTokenController);
+router.use(authMiddleware_1.authMiddleware);
+router.post("/", folderShareController_1.createFolderShareController);
+router.get("/folder/:folderId", folderShareController_1.listFolderSharesController);
+router.get("/shared-with-me", folderShareController_1.listSharedFoldersController);
+router.post("/folder-share-invites/:token/accept", folderShareController_1.acceptFolderInviteController);
+router.delete("/:shareId", folderShareController_1.removeFolderShareController);
+exports.default = router;

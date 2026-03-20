@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const sharedFileController_1 = require("../controllers/sharedFileController");
+const validateSchemaMiddleware_1 = require("../middlewares/validateSchemaMiddleware");
+const paramsSchema_1 = require("../schemas/paramsSchema");
+const router = (0, express_1.Router)();
+router.post("/:id/share", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), sharedFileController_1.createShareLink);
+router.get("/:token/info", sharedFileController_1.getSharedFileInfo);
+router.get("/:token", sharedFileController_1.openSharedFile);
+exports.default = router;

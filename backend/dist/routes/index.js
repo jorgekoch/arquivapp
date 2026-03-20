@@ -1,0 +1,37 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authRoutes_1 = __importDefault(require("./authRoutes"));
+const usersRoutes_1 = __importDefault(require("./usersRoutes"));
+const foldersRoutes_1 = __importDefault(require("./foldersRoutes"));
+const filesRoutes_1 = __importDefault(require("./filesRoutes"));
+const profileRoutes_1 = __importDefault(require("./profileRoutes"));
+const waitlistRoutes_1 = __importDefault(require("./waitlistRoutes"));
+const storageRoutes_1 = __importDefault(require("./storageRoutes"));
+const supportRoutes_1 = __importDefault(require("./supportRoutes"));
+const sharedFileRoutes_1 = __importDefault(require("./sharedFileRoutes"));
+const dashboardRoutes_1 = __importDefault(require("./dashboardRoutes"));
+const billingRoutes_1 = __importDefault(require("./billingRoutes"));
+const folderShareRoutes_1 = __importDefault(require("./folderShareRoutes"));
+const emailVerificationRoutes_1 = __importDefault(require("./emailVerificationRoutes"));
+const router = (0, express_1.Router)();
+router.get("/health", (req, res) => {
+    res.send("API OK");
+});
+router.use("/auth", authRoutes_1.default);
+router.use("/users", usersRoutes_1.default);
+router.use("/folders", foldersRoutes_1.default);
+router.use("/files", filesRoutes_1.default);
+router.use("/profile", profileRoutes_1.default);
+router.use("/waitlist", waitlistRoutes_1.default);
+router.use("/storage", storageRoutes_1.default);
+router.use("/support", supportRoutes_1.default);
+router.use("/shared", sharedFileRoutes_1.default);
+router.use("/dashboard", dashboardRoutes_1.default);
+router.use("/billing", billingRoutes_1.default);
+router.use("/folder-shares", folderShareRoutes_1.default);
+router.use("/email-verification", emailVerificationRoutes_1.default);
+exports.default = router;

@@ -4,7 +4,8 @@ import {
   forgotPasswordService,
   resetPasswordService,
 } from "../services/passwordResetService";
-import { verifyEmailService } from "../services/emailVerificationService";
+import { verifyEmailToken } from "../services/emailVerificationService";
+import { AppError } from "../errors/AppError";
 
 
 
@@ -63,9 +64,13 @@ export async function resetPassword(
 
 export async function verifyEmailController(req: Request, res: Response, next: NextFunction) {
   try {
-    const { token } = req.params;
+    const token = req.params.token;
 
-    await verifyEmailService(token);
+    if (!token || Array.isArray(token)) {
+      throw new AppError("Token inválido", 400);
+    }
+
+    await verifyEmailToken(token);
 
     // Redireciona pro frontend (melhor UX)
     res.redirect(`${process.env.FRONTEND_URL}/email-confirmed`);

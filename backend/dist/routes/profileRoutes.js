@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const profileController_1 = require("../controllers/profileController");
+const validateSchemaMiddleware_1 = require("../middlewares/validateSchemaMiddleware");
+const profileSchema_1 = require("../schemas/profileSchema");
+const uploadMiddleware_1 = require("../middlewares/uploadMiddleware");
+const router = (0, express_1.Router)();
+router.get("/", authMiddleware_1.authMiddleware, profileController_1.getProfile);
+router.patch("/", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateBody)(profileSchema_1.updateProfileSchema), profileController_1.updateProfile);
+router.patch("/password", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateBody)(profileSchema_1.updatePasswordSchema), profileController_1.updatePassword);
+router.patch("/avatar", authMiddleware_1.authMiddleware, uploadMiddleware_1.upload.single("file"), profileController_1.updateAvatar);
+exports.default = router;

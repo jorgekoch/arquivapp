@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const folderController_1 = require("../controllers/folderController");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const validateSchemaMiddleware_1 = require("../middlewares/validateSchemaMiddleware");
+const folderSchema_1 = require("../schemas/folderSchema");
+const paramsSchema_1 = require("../schemas/paramsSchema");
+const router = (0, express_1.Router)();
+router.post("/", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateBody)(folderSchema_1.createFolderSchema), folderController_1.createFolder);
+router.get("/list", authMiddleware_1.authMiddleware, folderController_1.getFolderList);
+router.get("/", authMiddleware_1.authMiddleware, folderController_1.getFolders);
+router.patch("/:id", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), (0, validateSchemaMiddleware_1.validateBody)(folderSchema_1.updateFolderSchema), folderController_1.updateFolder);
+router.delete("/:id", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), folderController_1.deleteFolder);
+exports.default = router;

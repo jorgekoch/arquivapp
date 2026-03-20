@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const filesController_1 = require("../controllers/filesController");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const validateSchemaMiddleware_1 = require("../middlewares/validateSchemaMiddleware");
+const paramsSchema_1 = require("../schemas/paramsSchema");
+const router = (0, express_1.Router)();
+router.post("/upload-url", authMiddleware_1.authMiddleware, filesController_1.createUploadUrl);
+router.post("/complete-upload", authMiddleware_1.authMiddleware, filesController_1.completeUpload);
+router.get("/folder/:folderId", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.folderIdParamSchema), filesController_1.listFiles);
+router.get("/:id/download", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), filesController_1.getFileDownloadUrl);
+router.patch("/:id/move", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), filesController_1.moveFile);
+router.patch("/:id", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), filesController_1.updateFile);
+router.delete("/:id", authMiddleware_1.authMiddleware, (0, validateSchemaMiddleware_1.validateParams)(paramsSchema_1.idParamSchema), filesController_1.deleteFile);
+exports.default = router;

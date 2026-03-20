@@ -10,9 +10,11 @@ import {
   findSharedFoldersForUser,
   findSharesByFolderId,
   findUserByEmail,
+  type FolderShareRole,
 } from "../repositories/folderShareRepository";
 import { findUserById } from "../repositories/userRepository";
 import { sendFolderInviteEmail, sendFolderInviteLinkEmail } from "./emailService";
+
 
 export async function shareFolder(params: {
   currentUserId: number;
@@ -268,7 +270,7 @@ export async function acceptFolderInvite(token: string, userId: number) {
       folderId: invite.folderId,
       ownerUserId: invite.ownerUserId,
       sharedWithUserId: user.id,
-      role: invite.role,
+      role: invite.role as FolderShareRole,
     });
   }
 
@@ -297,7 +299,7 @@ export async function acceptPendingFolderInvitesForUser(
         folderId: invite.folderId,
         ownerUserId: invite.ownerUserId,
         sharedWithUserId: userId,
-        role: invite.role,
+        role: invite.role as FolderShareRole,
       });
     }
 
