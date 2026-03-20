@@ -57,6 +57,12 @@ export async function verifyEmailToken(token: string) {
     throw new AppError("Token de verificação inválido", 404);
   }
 
+  if (user.emailVerified) {
+    return {
+      message: "E-mail já confirmado com sucesso",
+    };
+  }
+
   if (!user.emailVerificationExpiresAt) {
     throw new AppError("Token de verificação inválido", 400);
   }

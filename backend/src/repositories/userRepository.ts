@@ -134,8 +134,6 @@ export function confirmUserEmail(userId: number) {
     where: { id: userId },
     data: {
       emailVerified: true,
-      emailVerificationToken: null,
-      emailVerificationExpiresAt: null,
     },
   });
 }
