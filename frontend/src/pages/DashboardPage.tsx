@@ -16,6 +16,7 @@ import { ShareFolderDialog } from "../components/ShareFolderDialog";
 import { getFolderShares, getSharedFolders, removeFolderShare, shareFolder, shareFolder as shareFolderRequest } from "../services/folderShareService";
 import { UpgradeOfferDialog } from "../components/UpgradeOfferDialog";
 import { UpgradeProDialog } from "../components/UpgradeProDialog";
+import { useLocation } from "react-router-dom";
 
 const UPGRADE_OFFER_DISMISSED_KEY = "Arquivapp:upgradeOfferDismissedAt";
 const SELECTED_FOLDER_STORAGE_KEY = "Arquivapp:selectedFolderId";
@@ -72,6 +73,8 @@ export function DashboardPage() {
   const [showProFeatureDialog, setShowProFeatureDialog] = useState(false);
   const [showUpgradeOffer, setShowUpgradeOffer] = useState(false);
   const [ upgradeOpen, setUpgradeOpen ] = useState(false);
+  
+  const location = useLocation(); 
 
   const selectedFolder = useMemo(() => {
     const ownedFolder =
@@ -404,6 +407,12 @@ export function DashboardPage() {
     loadInitialDashboard();
     loadSharedFolders();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.fromInvite) {
+      toast.success("Você recebeu acesso a uma pasta compartilhada")
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!profile || profile.plan !== "FREE") return;

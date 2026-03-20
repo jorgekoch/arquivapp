@@ -10,9 +10,7 @@ export function PublicHeader() {
   return (
     <header className="public-header">
       <div className="public-header__brand">
-        <Link to="/" aria-label="Ir para a página inicial do Arquivapp">
           <BrandLogo variant="public" />
-        </Link>
       </div>
 
       <nav className="public-nav" aria-label="Navegação pública">

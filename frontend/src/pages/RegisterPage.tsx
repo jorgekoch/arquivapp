@@ -30,8 +30,18 @@ export function RegisterPage() {
     try {
       setLoading(true);
       await api.post("/users/register", form);
-      toast.success("Usuário criado com sucesso.");
+
+      const inviteToken = localStorage.getItem("inviteToken");
+
+      if (inviteToken) {
+        toast.success("Conta criada com sucesso. Agora entre para acessar a pasta compartilhada.");
+        navigate("/login");
+        return;
+      }
+
+      toast.success("Cadastro criado. Confira seu e-mail para confirmar a conta.");
       navigate("/login");
+
     } catch (err: any) {
       const message = err?.response?.data?.error || "Erro ao criar usuário";
       setError(message);

@@ -25,6 +25,8 @@ import { HowToOrganizeFilesCloudPage } from "./pages/HowToOrganizeFilesCloudPage
 import { GoogleDriveAlternativePage } from "./pages/GoogleDriveAlternativePage";
 import { SeoTopicPage } from "./pages/SeoTopicPage";
 import { UseCasePage } from "./pages/UseCasePage";
+import { FolderInvitePage } from "./pages/FolderInvitePage";
+import { ConfirmEmailPage } from "./pages/ConfirmEmailPage";
 
 export default function App() {
   return (
@@ -55,6 +57,8 @@ export default function App() {
             <Route path="/organizar-arquivos-na-nuvem" element={<OrganizeCloudDocumentsPage />} />
             <Route path="/como-organizar-arquivos-na-nuvem" element={<HowToOrganizeFilesCloudPage />} />
             <Route path="/alternativa-google-drive" element={<GoogleDriveAlternativePage />} />
+            <Route path="/invite/:token" element={<FolderInvitePage/>} />
+            <Route path="/confirm-email/:token" element={<ConfirmEmailPage />} />
 
             <Route
               path="/login"

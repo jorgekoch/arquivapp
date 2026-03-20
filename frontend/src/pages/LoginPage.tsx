@@ -28,6 +28,19 @@ export function LoginPage() {
     try {
       setLoading(true);
       await login(form);
+
+      const inviteToken = localStorage.getItem("inviteToken");
+
+      if (inviteToken) {
+        localStorage.removeItem("inviteToken");
+
+        navigate("/dashboard", {
+          state: { fromInvite: true },
+        });
+
+        return;
+      }
+
       navigate("/dashboard");
     } catch (err: any) {
       const message = err?.response?.data?.error || "Erro ao fazer login";
